@@ -4,8 +4,9 @@ import * as path from 'path';
 
 dotenv.config();
 
-// Auth state file written by globalSetup and consumed by authenticatedPage fixture
+// Auth state files written by globalSetup — one per user role
 export const AUTH_STATE_PATH = path.join('auth-state', 'standard-user.json');
+export const PROBLEM_USER_AUTH_STATE_PATH = path.join('auth-state', 'problem-user.json');
 
 export default defineConfig({
   testDir: './tests',

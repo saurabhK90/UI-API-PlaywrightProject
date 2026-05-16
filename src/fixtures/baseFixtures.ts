@@ -9,6 +9,8 @@ import { CheckoutCompletePage } from '@pages/CheckoutCompletePage';
 import { Logger } from '@utils/Logger';
 import path from 'path';
 
+const PROBLEM_USER_AUTH_STATE = path.join('auth-state', 'problem-user.json');
+
 export interface UIFixtures {
   /** Unauthenticated page — use for testing login flows */
   loginPage: LoginPage;
@@ -28,6 +30,17 @@ export interface UIFixtures {
   checkoutCompletePage: CheckoutCompletePage;
   /** Internal — writes a spec separator to the log file once per spec file. Auto-use. */
   _specLogger: void;
+  // ── Problem user fixtures — separate browser context pre-authenticated as problem_user ──
+  /** Raw Page pre-authenticated as problem_user — use when you need the page directly */
+  problemUserPage: Page;
+  /** Products listing page pre-authenticated as problem_user */
+  problemUserProductPage: ProductPage;
+  /** Product detail page pre-authenticated as problem_user */
+  problemUserProductDetailPage: ProductDetailPage;
+  /** Cart page pre-authenticated as problem_user */
+  problemUserCartPage: CartPage;
+  /** Checkout step 1 pre-authenticated as problem_user */
+  problemUserCheckoutStepOnePage: CheckoutStepOnePage;
 }
 
 export const test = base.extend<UIFixtures>({
@@ -71,6 +84,29 @@ export const test = base.extend<UIFixtures>({
 
   checkoutCompletePage: async ({ page }, use) => {
     await use(new CheckoutCompletePage(page));
+  },
+
+  problemUserPage: async ({ browser }, use) => {
+    const context = await browser.newContext({ storageState: PROBLEM_USER_AUTH_STATE });
+    const page = await context.newPage();
+    await use(page);
+    await context.close();
+  },
+
+  problemUserProductPage: async ({ problemUserPage }, use) => {
+    await use(new ProductPage(problemUserPage));
+  },
+
+  problemUserProductDetailPage: async ({ problemUserPage }, use) => {
+    await use(new ProductDetailPage(problemUserPage));
+  },
+
+  problemUserCartPage: async ({ problemUserPage }, use) => {
+    await use(new CartPage(problemUserPage));
+  },
+
+  problemUserCheckoutStepOnePage: async ({ problemUserPage }, use) => {
+    await use(new CheckoutStepOnePage(problemUserPage));
   },
 });
 

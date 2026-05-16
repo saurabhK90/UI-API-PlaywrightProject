@@ -6,8 +6,6 @@ import { CheckoutErrorMessages, CheckoutPageExpectations } from '@assertions/dom
 import { Logger } from '@utils/Logger';
 
 const log = Logger.getInstance();
-const VALID_PASSWORD    = process.env.TEST_PASSWORD!;
-const PROBLEM_USERNAME  = process.env.PROBLEM_USERNAME!;
 
 // slowMo adds a pause after every Playwright action so headed runs are easy to follow.
 // Set SLOW_MO=0 in CI or when speed matters (e.g. SLOW_MO=0 npx playwright test ...).
@@ -230,14 +228,13 @@ test.describe('Checkout', () => {
 
   test.describe('Problem User', () => {
 
-    test.beforeEach(async ({ loginPage }) => {
-      await loginPage.navigateToLogin();
-      await loginPage.login(PROBLEM_USERNAME, VALID_PASSWORD);
+    test.beforeEach(async ({ problemUserProductPage }) => {
+      await problemUserProductPage.navigateToInventory();
     });
 
     test('problem user cannot complete checkout because last name field rejects input',
       { tag: '@regression' },
-      async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
+      async ({ problemUserProductPage, problemUserCartPage, problemUserCheckoutStepOnePage, problemUserPage }) => {
       await allure.feature('Checkout');
       await allure.story('Checkout Step 1 - Problem User Behaviour');
       await allure.severity(Severity.CRITICAL);
@@ -245,27 +242,26 @@ test.describe('Checkout', () => {
 
       // --- Arrange ---
       log.info('[TC-CK-007] Problem user — adding product and navigating to checkout step 1');
-      await productPage.navigateToInventory();
-      await productPage.addProductToCartByIndex(0);
-      await productPage.goToCart();
-      await cartPage.clickCheckout();
+      await problemUserProductPage.addProductToCartByIndex(0);
+      await problemUserProductPage.goToCart();
+      await problemUserCartPage.clickCheckout();
 
       // --- Act ---
       log.info('[TC-CK-007] Filling first name and zip, attempting to type last name, clicking Continue');
-      await checkoutStepOnePage.fillFirstName('Jane');
-      await checkoutStepOnePage.fillLastName('Smith');
-      const lastNameValue = await checkoutStepOnePage.getLastNameValue();
+      await problemUserCheckoutStepOnePage.fillFirstName('Jane');
+      await problemUserCheckoutStepOnePage.fillLastName('Smith');
+      const lastNameValue = await problemUserCheckoutStepOnePage.getLastNameValue();
       log.info(`[TC-CK-007] Last name field value after typing: "${lastNameValue}"`);
-      await checkoutStepOnePage.fillZipCode('90210');
-      await checkoutStepOnePage.clickContinue();
+      await problemUserCheckoutStepOnePage.fillZipCode('90210');
+      await problemUserCheckoutStepOnePage.clickContinue();
 
       // --- Assert ---
       log.info('[TC-CK-007] Asserting last name required error shown — field did not retain input');
       await UIAssertions.assertElementContainsText(
-        checkoutStepOnePage.getErrorLocator(),
+        problemUserCheckoutStepOnePage.getErrorLocator(),
         CheckoutErrorMessages.LAST_NAME_REQUIRED
       );
-      await UIAssertions.assertURLContains(page, CheckoutPageExpectations.STEP_ONE_URL);
+      await UIAssertions.assertURLContains(problemUserPage, CheckoutPageExpectations.STEP_ONE_URL);
     });
 
   });

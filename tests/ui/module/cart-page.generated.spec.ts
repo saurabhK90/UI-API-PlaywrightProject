@@ -5,8 +5,6 @@ import { UIAssertions } from '@assertions/generic/UIAssertions';
 import { Logger } from '@utils/Logger';
 
 const log = Logger.getInstance();
-const VALID_PASSWORD = process.env.TEST_PASSWORD!;
-const PROBLEM_USERNAME = process.env.PROBLEM_USERNAME!;
 
 // slowMo adds a pause after every Playwright action so headed runs are easy to follow.
 // Set SLOW_MO=0 in CI or when speed matters (e.g. SLOW_MO=0 npx playwright test ...).
@@ -226,39 +224,38 @@ test.describe('Cart Page', () => {
 
   test.describe('Problem User', () => {
 
-    test.beforeEach(async ({ loginPage }) => {
-      await loginPage.navigateToLogin();
-      await loginPage.login(PROBLEM_USERNAME, VALID_PASSWORD);
+    test.beforeEach(async ({ problemUserProductPage }) => {
+      await problemUserProductPage.navigateToInventory();
     });
 
     test('problem user sees correct item details on the cart page matching what was added from the Products page',
       { tag: '@regression' },
-      async ({ productPage, cartPage }) => {
+      async ({ problemUserProductPage, problemUserCartPage }) => {
       await allure.feature('Cart Page');
       await allure.story('Display Cart Items');
       await allure.severity(Severity.CRITICAL);
       await allure.tag('regression');
 
       // --- Arrange ---
-      const productName = await productPage.getProductNameTextByIndex(0);
-      const productPrice = await productPage.getProductPriceByIndex(0);
+      const productName = await problemUserProductPage.getProductNameTextByIndex(0);
+      const productPrice = await problemUserProductPage.getProductPriceByIndex(0);
       log.info(`[TC-CP-003] Problem user — captured: "${productName}" at ${productPrice}`);
 
       // --- Act ---
       log.info(`[TC-CP-003] Adding "${productName}" to cart and navigating to cart page`);
-      await productPage.addProductToCartByIndex(0);
-      await productPage.goToCart();
+      await problemUserProductPage.addProductToCartByIndex(0);
+      await problemUserProductPage.goToCart();
 
       // --- Assert ---
       log.info('[TC-CP-003] Asserting cart shows correct item (not affected by image defect on Products page)');
-      await UIAssertions.assertElementCount(cartPage.getCartItemsLocator(), 1);
-      await UIAssertions.assertElementContainsText(cartPage.getItemNameLocatorByIndex(0), productName);
-      await UIAssertions.assertElementContainsText(cartPage.getItemPriceLocatorByIndex(0), productPrice);
+      await UIAssertions.assertElementCount(problemUserCartPage.getCartItemsLocator(), 1);
+      await UIAssertions.assertElementContainsText(problemUserCartPage.getItemNameLocatorByIndex(0), productName);
+      await UIAssertions.assertElementContainsText(problemUserCartPage.getItemPriceLocatorByIndex(0), productPrice);
     });
 
     test('problem user can remove an item from the cart',
       { tag: '@regression' },
-      async ({ productPage, cartPage }) => {
+      async ({ problemUserProductPage, problemUserCartPage }) => {
       await allure.feature('Cart Page');
       await allure.story('Remove Cart Items');
       await allure.severity(Severity.CRITICAL);
@@ -266,22 +263,22 @@ test.describe('Cart Page', () => {
 
       // --- Arrange ---
       log.info('[TC-CP-006] Problem user — adding product and navigating to cart page');
-      await productPage.addProductToCartByIndex(0);
-      await productPage.goToCart();
+      await problemUserProductPage.addProductToCartByIndex(0);
+      await problemUserProductPage.goToCart();
 
       // --- Act ---
       log.info('[TC-CP-006] Removing item at index 0 from cart');
-      await cartPage.removeItemByIndex(0);
+      await problemUserCartPage.removeItemByIndex(0);
 
       // --- Assert ---
       log.info('[TC-CP-006] Asserting cart is empty and badge is hidden');
-      await UIAssertions.assertElementCount(cartPage.getCartItemsLocator(), 0);
-      await UIAssertions.assertElementHidden(cartPage.getCartBadgeLocator(), 'cart badge');
+      await UIAssertions.assertElementCount(problemUserCartPage.getCartItemsLocator(), 0);
+      await UIAssertions.assertElementHidden(problemUserCartPage.getCartBadgeLocator(), 'cart badge');
     });
 
     test('problem user is navigated to the Products page when Continue Shopping is clicked',
       { tag: '@regression' },
-      async ({ productPage, cartPage, page }) => {
+      async ({ problemUserProductPage, problemUserCartPage, problemUserPage }) => {
       await allure.feature('Cart Page');
       await allure.story('Continue Shopping Navigation');
       await allure.severity(Severity.NORMAL);
@@ -289,21 +286,21 @@ test.describe('Cart Page', () => {
 
       // --- Arrange ---
       log.info('[TC-CP-008] Problem user — navigating to cart page');
-      await productPage.goToCart();
+      await problemUserProductPage.goToCart();
 
       // --- Act ---
       log.info('[TC-CP-008] Clicking Continue Shopping');
-      await cartPage.clickContinueShopping();
+      await problemUserCartPage.clickContinueShopping();
 
       // --- Assert ---
       log.info('[TC-CP-008] Asserting redirect to /inventory.html and Products heading visible');
-      await UIAssertions.assertURLContains(page, '/inventory.html');
-      await UIAssertions.assertElementVisible(productPage.getPageTitleLocator(), 'Products heading');
+      await UIAssertions.assertURLContains(problemUserPage, '/inventory.html');
+      await UIAssertions.assertElementVisible(problemUserProductPage.getPageTitleLocator(), 'Products heading');
     });
 
     test('problem user is navigated to the Checkout page when Checkout is clicked',
       { tag: '@regression' },
-      async ({ productPage, cartPage, page }) => {
+      async ({ problemUserProductPage, problemUserCartPage, problemUserPage }) => {
       await allure.feature('Cart Page');
       await allure.story('Checkout Navigation');
       await allure.severity(Severity.CRITICAL);
@@ -311,16 +308,16 @@ test.describe('Cart Page', () => {
 
       // --- Arrange ---
       log.info('[TC-CP-011] Problem user — adding product and navigating to cart page');
-      await productPage.addProductToCartByIndex(0);
-      await productPage.goToCart();
+      await problemUserProductPage.addProductToCartByIndex(0);
+      await problemUserProductPage.goToCart();
 
       // --- Act ---
       log.info('[TC-CP-011] Clicking Checkout');
-      await cartPage.clickCheckout();
+      await problemUserCartPage.clickCheckout();
 
       // --- Assert ---
       log.info('[TC-CP-011] Asserting redirect to /checkout-step-one.html');
-      await UIAssertions.assertURLContains(page, '/checkout-step-one.html');
+      await UIAssertions.assertURLContains(problemUserPage, '/checkout-step-one.html');
     });
 
   });
