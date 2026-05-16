@@ -1,0 +1,2 @@
+# This directory holds auth state JSON files created at runtime by globalSetup.
+# The JSON files are gitignored — only this .gitkeep is tracked to preserve the directory.

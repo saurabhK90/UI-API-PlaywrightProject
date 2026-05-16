@@ -1,0 +1,155 @@
+[
+  {
+    "id": "TC-LOGIN-001",
+    "title": "Standard user logs in and lands on product catalog page",
+    "feature": "Login",
+    "type": "Smoke",
+    "severity": "CRITICAL",
+    "preconditions": "App is accessible; standard_user account exists",
+    "description": "Validates that a standard user with correct credentials is authenticated and redirected to the product catalog page with the expected page title.",
+    "steps": [
+      { "step": 1, "action": "Navigate to the login page (BASE_URL)", "expectedState": "Login form is visible with username, password fields and Login button" },
+      { "step": 2, "action": "Enter username from TEST_USERNAME env var", "expectedState": "Username field shows entered value" },
+      { "step": 3, "action": "Enter password from TEST_PASSWORD env var", "expectedState": "Password field shows masked characters" },
+      { "step": 4, "action": "Click the Login button", "expectedState": "Page navigates away from login" }
+    ],
+    "expectedResult": "URL changes to /inventory.html; page title is 'Swag Labs'; product catalog grid is visible with at least one product",
+    "actualResult": "[To be filled during test execution]",
+    "dataConditions": {
+      "input": "TEST_USERNAME=standard_user, TEST_PASSWORD=secret_sauce (loaded from process.env — never hardcoded in test)",
+      "state": "User is logged out; app is on the login page",
+      "constraints": "Credentials must match an active standard_user"
+    }
+  },
+  {
+    "id": "TC-LOGIN-002",
+    "title": "User sees error when correct username but wrong password is entered",
+    "feature": "Login",
+    "type": "Regression",
+    "severity": "CRITICAL",
+    "preconditions": "App is accessible; login page is open",
+    "description": "Validates that the system rejects a login attempt with a valid username paired with an incorrect password and surfaces the appropriate error message.",
+    "steps": [
+      { "step": 1, "action": "Navigate to the login page", "expectedState": "Login form is visible" },
+      { "step": 2, "action": "Enter TEST_USERNAME (standard_user)", "expectedState": "Username field shows entered value" },
+      { "step": 3, "action": "Enter an invalid password: 'wrong_password'", "expectedState": "Password field shows masked characters" },
+      { "step": 4, "action": "Click the Login button", "expectedState": "Page does not navigate away" }
+    ],
+    "expectedResult": "User remains on the login page; error message 'Epic sadface: Username and password do not match any user in this service' is visible; both fields show error indicator",
+    "actualResult": "[To be filled during test execution]",
+    "dataConditions": {
+      "input": "username=standard_user (from TEST_USERNAME), password='wrong_password' (literal invalid value)",
+      "state": "User is logged out; app is on the login page",
+      "constraints": "Password must not match the actual TEST_PASSWORD"
+    }
+  },
+  {
+    "id": "TC-LOGIN-003",
+    "title": "User sees error when non-existent username is entered with valid password",
+    "feature": "Login",
+    "type": "Regression",
+    "severity": "NORMAL",
+    "preconditions": "App is accessible; login page is open",
+    "description": "Validates that the system rejects a login attempt using an unrecognised username, even when paired with a valid password, and displays the credential mismatch error.",
+    "steps": [
+      { "step": 1, "action": "Navigate to the login page", "expectedState": "Login form is visible" },
+      { "step": 2, "action": "Enter an invalid username: 'invalid_user_xyz'", "expectedState": "Username field shows entered value" },
+      { "step": 3, "action": "Enter TEST_PASSWORD (secret_sauce)", "expectedState": "Password field shows masked characters" },
+      { "step": 4, "action": "Click the Login button", "expectedState": "Page does not navigate away" }
+    ],
+    "expectedResult": "User remains on the login page; error message 'Epic sadface: Username and password do not match any user in this service' is visible; error indicator shown on both fields",
+    "actualResult": "[To be filled during test execution]",
+    "dataConditions": {
+      "input": "username='invalid_user_xyz' (non-existent username), password from TEST_PASSWORD env var",
+      "state": "User is logged out; app is on the login page",
+      "constraints": "Username must not match any registered account"
+    }
+  },
+  {
+    "id": "TC-LOGIN-004",
+    "title": "Locked user sees lockout error message on login attempt",
+    "feature": "Login",
+    "type": "Regression",
+    "severity": "CRITICAL",
+    "preconditions": "App is accessible; locked_out_user account exists",
+    "description": "Validates that a locked user account is explicitly refused with a distinct lockout error message — not the generic credentials mismatch message used for invalid credentials.",
+    "steps": [
+      { "step": 1, "action": "Navigate to the login page", "expectedState": "Login form is visible" },
+      { "step": 2, "action": "Enter username: 'locked_out_user' (from resources/testdata/users.json locked user)", "expectedState": "Username field shows entered value" },
+      { "step": 3, "action": "Enter TEST_PASSWORD (secret_sauce)", "expectedState": "Password field shows masked characters" },
+      { "step": 4, "action": "Click the Login button", "expectedState": "Page does not navigate away" }
+    ],
+    "expectedResult": "User remains on the login page; error message 'Epic sadface: Sorry, this user has been locked out.' is visible; message is distinct from the generic credentials error; error indicator shown on both fields",
+    "actualResult": "[To be filled during test execution]",
+    "dataConditions": {
+      "input": "username='locked_out_user' (from users.json), password from TEST_PASSWORD env var",
+      "state": "User is logged out; locked_out_user account is locked",
+      "constraints": "Account lock state must be permanent (not session-based)"
+    }
+  },
+  {
+    "id": "TC-LOGIN-005",
+    "title": "User sees validation error when username field is submitted empty",
+    "feature": "Login",
+    "type": "Regression",
+    "severity": "NORMAL",
+    "preconditions": "App is accessible; login page is open",
+    "description": "Validates that submitting the login form with the username field blank produces a specific 'username required' validation message.",
+    "steps": [
+      { "step": 1, "action": "Navigate to the login page", "expectedState": "Login form is visible; both fields are empty" },
+      { "step": 2, "action": "Leave username field empty", "expectedState": "Field remains blank" },
+      { "step": 3, "action": "Enter TEST_PASSWORD in the password field", "expectedState": "Password field shows masked characters" },
+      { "step": 4, "action": "Click the Login button", "expectedState": "Page does not navigate away" }
+    ],
+    "expectedResult": "User remains on the login page; error message 'Epic sadface: Username is required' is visible; username field highlighted with error indicator",
+    "actualResult": "[To be filled during test execution]",
+    "dataConditions": {
+      "input": "username='' (empty), password from TEST_PASSWORD env var",
+      "state": "User is logged out; app is on the login page",
+      "constraints": "No whitespace-only username should pass validation"
+    }
+  },
+  {
+    "id": "TC-LOGIN-006",
+    "title": "User sees validation error when password field is submitted empty",
+    "feature": "Login",
+    "type": "Regression",
+    "severity": "NORMAL",
+    "preconditions": "App is accessible; login page is open",
+    "description": "Validates that submitting the login form with the password field blank produces a specific 'password required' validation message.",
+    "steps": [
+      { "step": 1, "action": "Navigate to the login page", "expectedState": "Login form is visible; both fields are empty" },
+      { "step": 2, "action": "Enter TEST_USERNAME (standard_user) in username field", "expectedState": "Username field shows entered value" },
+      { "step": 3, "action": "Leave password field empty", "expectedState": "Password field remains blank" },
+      { "step": 4, "action": "Click the Login button", "expectedState": "Page does not navigate away" }
+    ],
+    "expectedResult": "User remains on the login page; error message 'Epic sadface: Password is required' is visible; password field highlighted with error indicator",
+    "actualResult": "[To be filled during test execution]",
+    "dataConditions": {
+      "input": "username from TEST_USERNAME env var, password='' (empty)",
+      "state": "User is logged out; app is on the login page",
+      "constraints": "No whitespace-only password should bypass check"
+    }
+  },
+  {
+    "id": "TC-LOGIN-007",
+    "title": "User sees validation error when both fields are empty on login attempt",
+    "feature": "Login",
+    "type": "Regression",
+    "severity": "MINOR",
+    "preconditions": "App is accessible; login page is open",
+    "description": "Validates that clicking Login with both fields blank shows the username-required error (username is validated first before password).",
+    "steps": [
+      { "step": 1, "action": "Navigate to the login page", "expectedState": "Login form is visible; both fields are empty" },
+      { "step": 2, "action": "Leave both username and password fields empty", "expectedState": "Both fields remain blank" },
+      { "step": 3, "action": "Click the Login button", "expectedState": "Page does not navigate away" }
+    ],
+    "expectedResult": "User remains on the login page; error message 'Epic sadface: Username is required' is visible (username validated before password); username field highlighted with error indicator",
+    "actualResult": "[To be filled during test execution]",
+    "dataConditions": {
+      "input": "username='' (empty), password='' (empty)",
+      "state": "User is logged out; app is on the login page",
+      "constraints": "Form must not submit with both fields empty"
+    }
+  }
+]

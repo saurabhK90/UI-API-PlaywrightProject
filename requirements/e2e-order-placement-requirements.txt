@@ -1,0 +1,15 @@
+For the application under test i.e Sauce Lab, write comprehensive E2E test
+cases (only positive) 
+
+E2E Flow
+Login --> Product (Add Item or Items) --> Cart --> Checkout 1 --> checkout 2 --> Finish
+Login --> Product details (Add Item or Items) --> Cart --> Checkout 1 --> checkout 2 --> Finish
+
+Acceptance Criteria:
+
+1. E2E test case should cover entire journey for single item, it should
+    cover necessary validation at each flow or stage
+2. E2E test case should cover entire journey for multiple items, it should
+    cover necessary validation at each flow or stage
+
+        

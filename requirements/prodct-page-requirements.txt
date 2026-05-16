@@ -1,0 +1,19 @@
+For the application under test i.e Sauce Lab, the Product page has been 
+implemented. We need to write positive and negative test cases for valid user 
+(standard user) and invalid (problem_user)
+
+Acceptance Criteria:
+
+1. On Product Page a user can ,
+    a) Add Single or multiple item to cart, Cart count should increment 
+        and match with items added.
+    b) Remove the single or multiple or all items from the cart and 
+        count should reduce after removal.
+    c) On clicking any product name, user should be redirected to product detail page.
+    d) For problem user, 
+        i) remove button should not reduce the quantity.
+        ii) All product images would be same but different titles.
+        iii) On clicking, any product link the detail page should  show differnt image still not actual image of product.
+    e) cart icon should be clickable, either when cart has single, multiple or 0 items
+        should navigate to cart page.
+        

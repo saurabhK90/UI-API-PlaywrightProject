@@ -1,0 +1,403 @@
+{
+  "module": "E2E - Order Placement",
+  "journeyType": "e2e",
+  "pagesInvolved": [
+    "LoginPage",
+    "ProductsPage",
+    "ProductDetailPage",
+    "CartPage",
+    "CheckoutInformationPage",
+    "CheckoutOverviewPage",
+    "CheckoutCompletePage"
+  ],
+  "generatedDate": "2026-05-16",
+  "generatedFrom": "requirements/e2e-order-placement-requirements.txt",
+  "testCases": [
+    {
+      "testCaseId": "TC-E2E-001",
+      "title": "Standard user completes single item order by adding product from the product listing page",
+      "description": "Full positive journey from login through selecting one product on the listing page, proceeding through cart, filling checkout information, reviewing the order summary, and reaching the order confirmation screen.",
+      "tags": [
+        "e2e",
+        "smoke"
+      ],
+      "severity": "CRITICAL",
+      "feature": "Order Placement",
+      "story": "Standard user places an order for a single item via the product listing page",
+      "userType": "standard_user",
+      "type": "critical-path",
+      "entryPoint": "Login Page",
+      "exitPoint": "Checkout Complete Page",
+      "pagesTraversed": [
+        "LoginPage",
+        "ProductsPage",
+        "CartPage",
+        "CheckoutInformationPage",
+        "CheckoutOverviewPage",
+        "CheckoutCompletePage"
+      ],
+      "preconditions": "Standard user account exists and credentials are available via environment variables. At least one product is available on the products listing page.",
+      "journeyStages": [
+        {
+          "stage": 1,
+          "page": "Login Page",
+          "action": "Navigate to the application URL and enter valid standard user credentials (username and password), then submit the login form.",
+          "assertion": "User is redirected to the Products page (/inventory.html). The page heading 'Products' is visible and at least one product card is displayed."
+        },
+        {
+          "stage": 2,
+          "page": "Products Page",
+          "action": "Click the 'Add to cart' button on one product in the listing.",
+          "assertion": "The cart badge in the header increments to 1. The clicked product's button label changes from 'Add to cart' to 'Remove'."
+        },
+        {
+          "stage": 3,
+          "page": "Products Page",
+          "action": "Click the shopping cart icon in the top-right header.",
+          "assertion": "User is navigated to the Cart page (/cart.html). The page heading 'Your Cart' is visible."
+        },
+        {
+          "stage": 4,
+          "page": "Cart Page",
+          "action": "Review the cart contents.",
+          "assertion": "Exactly one item is listed. The product name and price match the item added from the products page. The quantity is 1."
+        },
+        {
+          "stage": 5,
+          "page": "Cart Page",
+          "action": "Click the 'Checkout' button.",
+          "assertion": "User is navigated to Checkout Step 1 (/checkout-step-one.html). The form with fields for First Name, Last Name, and Zip/Postal Code is visible."
+        },
+        {
+          "stage": 6,
+          "page": "Checkout Information Page (Step 1)",
+          "action": "Enter a valid First Name, Last Name, and Zip/Postal Code into the form fields, then click 'Continue'.",
+          "assertion": "User is navigated to Checkout Step 2 (/checkout-step-two.html). The page heading 'Checkout: Overview' is visible."
+        },
+        {
+          "stage": 7,
+          "page": "Checkout Overview Page (Step 2)",
+          "action": "Review the order summary displayed on the page.",
+          "assertion": "The product added in Stage 2 is listed with the correct name, quantity (1), and unit price. Item total, tax amount, and grand total are displayed and the grand total equals item total plus tax."
+        },
+        {
+          "stage": 8,
+          "page": "Checkout Overview Page (Step 2)",
+          "action": "Click the 'Finish' button.",
+          "assertion": "User is navigated to the Checkout Complete page (/checkout-complete.html). The confirmation header 'Thank you for your order!' is visible. The completion sub-message confirming dispatch is displayed."
+        }
+      ],
+      "expectedResult": "Checkout Complete page is displayed with the header 'Thank you for your order!' and the order dispatched confirmation message. The cart badge is no longer visible (cart is empty).",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "product": "any single in-stock product from the products listing page",
+        "firstName": "RandomUtils.generateFirstName()",
+        "lastName": "RandomUtils.generateLastName()",
+        "zipCode": "RandomUtils.generateZipCode()"
+      }
+    },
+    {
+      "testCaseId": "TC-E2E-002",
+      "title": "Standard user completes multiple items order by adding products from the product listing page",
+      "description": "Full positive journey from login through adding three products from the listing page, proceeding through cart, filling checkout information, reviewing the order summary with all items and the correct total, and reaching the order confirmation screen.",
+      "tags": [
+        "e2e",
+        "regression"
+      ],
+      "severity": "CRITICAL",
+      "feature": "Order Placement",
+      "story": "Standard user places an order for multiple items via the product listing page",
+      "userType": "standard_user",
+      "type": "critical-path",
+      "entryPoint": "Login Page",
+      "exitPoint": "Checkout Complete Page",
+      "pagesTraversed": [
+        "LoginPage",
+        "ProductsPage",
+        "CartPage",
+        "CheckoutInformationPage",
+        "CheckoutOverviewPage",
+        "CheckoutCompletePage"
+      ],
+      "preconditions": "Standard user account exists. At least three distinct products are available on the products listing page.",
+      "journeyStages": [
+        {
+          "stage": 1,
+          "page": "Login Page",
+          "action": "Navigate to the application URL and enter valid standard user credentials, then submit the login form.",
+          "assertion": "User is redirected to the Products page (/inventory.html). The page heading 'Products' is visible and multiple product cards are displayed."
+        },
+        {
+          "stage": 2,
+          "page": "Products Page",
+          "action": "Click the 'Add to cart' button on the first product.",
+          "assertion": "Cart badge increments to 1. The first product's button changes to 'Remove'."
+        },
+        {
+          "stage": 3,
+          "page": "Products Page",
+          "action": "Click the 'Add to cart' button on a second distinct product.",
+          "assertion": "Cart badge increments to 2. The second product's button changes to 'Remove'."
+        },
+        {
+          "stage": 4,
+          "page": "Products Page",
+          "action": "Click the 'Add to cart' button on a third distinct product.",
+          "assertion": "Cart badge increments to 3. The third product's button changes to 'Remove'."
+        },
+        {
+          "stage": 5,
+          "page": "Products Page",
+          "action": "Click the shopping cart icon in the header.",
+          "assertion": "User is navigated to the Cart page (/cart.html). The page heading 'Your Cart' is visible."
+        },
+        {
+          "stage": 6,
+          "page": "Cart Page",
+          "action": "Review the cart contents.",
+          "assertion": "All three added products are listed. Each item shows the correct product name, quantity (1), and price. No unintended items are present."
+        },
+        {
+          "stage": 7,
+          "page": "Cart Page",
+          "action": "Click the 'Checkout' button.",
+          "assertion": "User is navigated to Checkout Step 1 (/checkout-step-one.html). The form with First Name, Last Name, and Zip/Postal Code fields is visible."
+        },
+        {
+          "stage": 8,
+          "page": "Checkout Information Page (Step 1)",
+          "action": "Enter a valid First Name, Last Name, and Zip/Postal Code, then click 'Continue'.",
+          "assertion": "User is navigated to Checkout Step 2 (/checkout-step-two.html). The page heading 'Checkout: Overview' is visible."
+        },
+        {
+          "stage": 9,
+          "page": "Checkout Overview Page (Step 2)",
+          "action": "Review the complete order summary.",
+          "assertion": "All three products are listed with correct names, quantities, and individual prices. Item total equals the sum of all three product prices. Tax amount is displayed. Grand total equals item total plus tax."
+        },
+        {
+          "stage": 10,
+          "page": "Checkout Overview Page (Step 2)",
+          "action": "Click the 'Finish' button.",
+          "assertion": "User is navigated to the Checkout Complete page (/checkout-complete.html). The confirmation header 'Thank you for your order!' is visible."
+        }
+      ],
+      "expectedResult": "Checkout Complete page is displayed with the header 'Thank you for your order!' and the order dispatched confirmation message. The cart badge is no longer visible (cart is empty).",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "products": "three distinct in-stock products from the products listing page",
+        "firstName": "RandomUtils.generateFirstName()",
+        "lastName": "RandomUtils.generateLastName()",
+        "zipCode": "RandomUtils.generateZipCode()"
+      }
+    },
+    {
+      "testCaseId": "TC-E2E-003",
+      "title": "Standard user completes single item order by adding product from the product detail page",
+      "description": "Full positive journey from login through navigating to a product detail page, adding the item from the detail view, proceeding through cart, filling checkout information, reviewing the summary, and reaching the order confirmation screen.",
+      "tags": [
+        "e2e",
+        "regression"
+      ],
+      "severity": "CRITICAL",
+      "feature": "Order Placement",
+      "story": "Standard user places an order for a single item via the product detail page",
+      "userType": "standard_user",
+      "type": "alternative-path",
+      "entryPoint": "Login Page",
+      "exitPoint": "Checkout Complete Page",
+      "pagesTraversed": [
+        "LoginPage",
+        "ProductsPage",
+        "ProductDetailPage",
+        "CartPage",
+        "CheckoutInformationPage",
+        "CheckoutOverviewPage",
+        "CheckoutCompletePage"
+      ],
+      "preconditions": "Standard user account exists. At least one product is available and its detail page is accessible.",
+      "journeyStages": [
+        {
+          "stage": 1,
+          "page": "Login Page",
+          "action": "Navigate to the application URL and enter valid standard user credentials, then submit the login form.",
+          "assertion": "User is redirected to the Products page (/inventory.html). The page heading 'Products' is visible and product cards are displayed."
+        },
+        {
+          "stage": 2,
+          "page": "Products Page",
+          "action": "Click on the product name or product image of one item to navigate to its detail page.",
+          "assertion": "User is navigated to the Product Detail page (/inventory-item.html). The product name, description, price, and an 'Add to cart' button are visible."
+        },
+        {
+          "stage": 3,
+          "page": "Product Detail Page",
+          "action": "Verify the product details (name, description, price) are displayed, then click the 'Add to cart' button.",
+          "assertion": "Cart badge in the header increments to 1. The product button changes from 'Add to cart' to 'Remove'."
+        },
+        {
+          "stage": 4,
+          "page": "Product Detail Page",
+          "action": "Click the shopping cart icon in the header.",
+          "assertion": "User is navigated to the Cart page (/cart.html). The page heading 'Your Cart' is visible."
+        },
+        {
+          "stage": 5,
+          "page": "Cart Page",
+          "action": "Review the cart contents.",
+          "assertion": "Exactly one item is listed. The product name and price match the item viewed on the detail page. Quantity is 1."
+        },
+        {
+          "stage": 6,
+          "page": "Cart Page",
+          "action": "Click the 'Checkout' button.",
+          "assertion": "User is navigated to Checkout Step 1 (/checkout-step-one.html). The form with First Name, Last Name, and Zip/Postal Code fields is visible."
+        },
+        {
+          "stage": 7,
+          "page": "Checkout Information Page (Step 1)",
+          "action": "Enter a valid First Name, Last Name, and Zip/Postal Code, then click 'Continue'.",
+          "assertion": "User is navigated to Checkout Step 2 (/checkout-step-two.html). The page heading 'Checkout: Overview' is visible."
+        },
+        {
+          "stage": 8,
+          "page": "Checkout Overview Page (Step 2)",
+          "action": "Review the order summary.",
+          "assertion": "The product from the detail page is listed with the correct name, quantity (1), and price. Item total, tax, and grand total are displayed and the grand total equals item total plus tax."
+        },
+        {
+          "stage": 9,
+          "page": "Checkout Overview Page (Step 2)",
+          "action": "Click the 'Finish' button.",
+          "assertion": "User is navigated to the Checkout Complete page (/checkout-complete.html). The confirmation header 'Thank you for your order!' is visible."
+        }
+      ],
+      "expectedResult": "Checkout Complete page is displayed with the header 'Thank you for your order!' and the order dispatched confirmation message. The cart badge is no longer visible (cart is empty).",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "product": "any single in-stock product accessible via its detail page",
+        "firstName": "RandomUtils.generateFirstName()",
+        "lastName": "RandomUtils.generateLastName()",
+        "zipCode": "RandomUtils.generateZipCode()"
+      }
+    },
+    {
+      "testCaseId": "TC-E2E-004",
+      "title": "Standard user completes multiple items order by adding products from individual product detail pages",
+      "description": "Full positive journey from login through visiting each product detail page and adding it to the cart, proceeding through cart, filling checkout information, reviewing the multi-item order summary, and reaching the order confirmation screen.",
+      "tags": [
+        "e2e",
+        "regression"
+      ],
+      "severity": "CRITICAL",
+      "feature": "Order Placement",
+      "story": "Standard user places an order for multiple items each added via their individual product detail pages",
+      "userType": "standard_user",
+      "type": "alternative-path",
+      "entryPoint": "Login Page",
+      "exitPoint": "Checkout Complete Page",
+      "pagesTraversed": [
+        "LoginPage",
+        "ProductsPage",
+        "ProductDetailPage",
+        "ProductsPage",
+        "ProductDetailPage",
+        "CartPage",
+        "CheckoutInformationPage",
+        "CheckoutOverviewPage",
+        "CheckoutCompletePage"
+      ],
+      "preconditions": "Standard user account exists. At least two distinct products are available and their detail pages are accessible.",
+      "journeyStages": [
+        {
+          "stage": 1,
+          "page": "Login Page",
+          "action": "Navigate to the application URL and enter valid standard user credentials, then submit the login form.",
+          "assertion": "User is redirected to the Products page (/inventory.html). The page heading 'Products' is visible and multiple product cards are displayed."
+        },
+        {
+          "stage": 2,
+          "page": "Products Page",
+          "action": "Click on the name or image of the first product to navigate to its detail page.",
+          "assertion": "User is navigated to the Product Detail page for the first product. The product name, description, price, and 'Add to cart' button are visible."
+        },
+        {
+          "stage": 3,
+          "page": "Product Detail Page (first product)",
+          "action": "Click the 'Add to cart' button on the first product's detail page.",
+          "assertion": "Cart badge increments to 1. The button changes from 'Add to cart' to 'Remove'."
+        },
+        {
+          "stage": 4,
+          "page": "Product Detail Page (first product)",
+          "action": "Click the 'Back to products' button to return to the products listing.",
+          "assertion": "User is navigated back to the Products page (/inventory.html). The first product's button shows 'Remove'. Cart badge still shows 1."
+        },
+        {
+          "stage": 5,
+          "page": "Products Page",
+          "action": "Click on the name or image of a second distinct product to navigate to its detail page.",
+          "assertion": "User is navigated to the Product Detail page for the second product. The product name, description, price, and 'Add to cart' button are visible."
+        },
+        {
+          "stage": 6,
+          "page": "Product Detail Page (second product)",
+          "action": "Click the 'Add to cart' button on the second product's detail page.",
+          "assertion": "Cart badge increments to 2. The button changes from 'Add to cart' to 'Remove'."
+        },
+        {
+          "stage": 7,
+          "page": "Product Detail Page (second product)",
+          "action": "Click the shopping cart icon in the header.",
+          "assertion": "User is navigated to the Cart page (/cart.html). The page heading 'Your Cart' is visible."
+        },
+        {
+          "stage": 8,
+          "page": "Cart Page",
+          "action": "Review the cart contents.",
+          "assertion": "Both products are listed with their correct names, quantities (1 each), and prices. No unintended items are present. Total item count is 2."
+        },
+        {
+          "stage": 9,
+          "page": "Cart Page",
+          "action": "Click the 'Checkout' button.",
+          "assertion": "User is navigated to Checkout Step 1 (/checkout-step-one.html). The form with First Name, Last Name, and Zip/Postal Code fields is visible."
+        },
+        {
+          "stage": 10,
+          "page": "Checkout Information Page (Step 1)",
+          "action": "Enter a valid First Name, Last Name, and Zip/Postal Code, then click 'Continue'.",
+          "assertion": "User is navigated to Checkout Step 2 (/checkout-step-two.html). The page heading 'Checkout: Overview' is visible."
+        },
+        {
+          "stage": 11,
+          "page": "Checkout Overview Page (Step 2)",
+          "action": "Review the complete order summary.",
+          "assertion": "Both products are listed with correct names, quantities, and individual prices. Item total equals the sum of both product prices. Tax amount is displayed. Grand total equals item total plus tax."
+        },
+        {
+          "stage": 12,
+          "page": "Checkout Overview Page (Step 2)",
+          "action": "Click the 'Finish' button.",
+          "assertion": "User is navigated to the Checkout Complete page (/checkout-complete.html). The confirmation header 'Thank you for your order!' is visible."
+        }
+      ],
+      "expectedResult": "Checkout Complete page is displayed with the header 'Thank you for your order!' and the order dispatched confirmation message. The cart badge is no longer visible (cart is empty).",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "products": "two distinct in-stock products each accessed via their individual detail pages",
+        "firstName": "RandomUtils.generateFirstName()",
+        "lastName": "RandomUtils.generateLastName()",
+        "zipCode": "RandomUtils.generateZipCode()"
+      }
+    }
+  ]
+}

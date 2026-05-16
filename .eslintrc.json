@@ -1,0 +1,86 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-restricted-properties": [
+      "error",
+      {
+        "object": "page",
+        "property": "waitForTimeout",
+        "message": "Use explicit locator waits or network waits instead of fixed sleeps. If a delay is truly needed (e.g., animation timing), add a comment explaining why."
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["@playwright/test"],
+            "message": "Import test and expect from src/fixtures/index.ts, not directly from @playwright/test."
+          }
+        ],
+        "paths": [
+          {
+            "name": "@playwright/test",
+            "importNames": ["test", "expect"],
+            "message": "Import test and expect from src/fixtures/index.ts for fixture injection."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/base/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": "off",
+        "@typescript-eslint/restrict-template-expressions": "off"
+      }
+    },
+    {
+      "files": ["src/fixtures/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": "off",
+        "no-empty-pattern": "off"
+      }
+    },
+    {
+      "files": ["src/assertions/**/*.ts", "src/api/**/*.ts", "src/pages/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": "off",
+        "@typescript-eslint/require-await": "off"
+      }
+    },
+    {
+      "files": ["src/utils/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@playwright/test", "playwright"],
+                "message": "Utils must be pure TypeScript — no Playwright imports allowed in src/utils/."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "ignorePatterns": ["dist/", "node_modules/", "*.js", "tests/api/**", "src/ai/**"]
+}

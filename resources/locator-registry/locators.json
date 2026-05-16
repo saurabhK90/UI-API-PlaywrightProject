@@ -1,0 +1,288 @@
+{
+  "_comment": "Locator history registry. Updated by the heal-locators script when locator fixes are accepted. Used by LocatorHealer for self-healing suggestions.",
+  "LoginPage.usernameInput": {
+    "selector": "getByPlaceholder('Username')",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["[data-test='username']"],
+    "deprecated": [
+      { "selector": "[data-testid='username']", "replacedOn": "2026-05-16", "reason": "Sauce Demo uses data-test not data-testid; testIdAttribute not configured for data-test in playwright.config" }
+    ]
+  },
+  "LoginPage.passwordInput": {
+    "selector": "getByPlaceholder('Password')",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["[data-test='password']"],
+    "deprecated": [
+      { "selector": "[data-testid='password']", "replacedOn": "2026-05-16", "reason": "Sauce Demo uses data-test not data-testid" }
+    ]
+  },
+  "LoginPage.loginButton": {
+    "selector": "getByRole('button', { name: 'Login' })",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["[data-test='login-button']"],
+    "deprecated": [
+      { "selector": "role=button[name='Log In']", "replacedOn": "2026-05-16", "reason": "Button text is 'Login' (no space) — regex /log in/i did not match" },
+      { "selector": "role=button[name='Log In']", "replacedOn": "2026-05-15", "reason": "Prior placeholder" }
+    ]
+  },
+  "LoginPage.errorMessage": {
+    "selector": "[data-test='error']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["h3:has-text('Epic sadface')"],
+    "deprecated": [
+      { "selector": "[data-testid='login-error']", "replacedOn": "2026-05-16", "reason": "Sauce Demo uses data-test attribute; no data-testid on error element" }
+    ]
+  },
+  "ProductPage.cartLink": {
+    "selector": "[data-test='shopping-cart-link']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".shopping_cart_link"],
+    "deprecated": []
+  },
+  "ProductPage.cartBadge": {
+    "selector": "[data-test='shopping-cart-badge']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".shopping_cart_badge"],
+    "deprecated": []
+  },
+  "ProductPage.inventoryItems": {
+    "selector": "[data-test='inventory-item']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".inventory_item"],
+    "deprecated": []
+  },
+  "ProductPage.inventoryItemName": {
+    "selector": "[data-test='inventory-item-name']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".inventory_item_name"],
+    "deprecated": []
+  },
+  "ProductPage.addToCartButton": {
+    "selector": "getByRole('button', { name: 'Add to cart' }) scoped to [data-test='inventory-item'].nth(n)",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["[data-test^='add-to-cart']"],
+    "deprecated": []
+  },
+  "ProductPage.removeButton": {
+    "selector": "getByRole('button', { name: 'Remove' }) scoped to [data-test='inventory-item'].nth(n)",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["[data-test^='remove']"],
+    "deprecated": []
+  },
+  "ProductPage.productImages": {
+    "selector": ".inventory_item_img img",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["[data-test^='inventory-item-'][data-test$='-img']"],
+    "deprecated": []
+  },
+  "ProductDetailPage.productName": {
+    "selector": "[data-test='inventory-item-name']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".inventory_details_name"],
+    "deprecated": []
+  },
+  "ProductDetailPage.productImage": {
+    "selector": ".inventory_details_img",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["[data-test^='item-'][data-test$='-img']"],
+    "deprecated": []
+  },
+  "ProductDetailPage.addToCartBtn": {
+    "selector": "[data-test='add-to-cart']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByRole('button', { name: 'Add to cart' })"],
+    "deprecated": []
+  },
+  "ProductDetailPage.removeBtn": {
+    "selector": "[data-test='remove']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByRole('button', { name: 'Remove' })"],
+    "deprecated": []
+  },
+  "ProductDetailPage.cartBadge": {
+    "selector": "[data-test='shopping-cart-badge']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".shopping_cart_badge"],
+    "deprecated": []
+  },
+  "ProductDetailPage.cartLink": {
+    "selector": "[data-test='shopping-cart-link']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".shopping_cart_link"],
+    "deprecated": []
+  },
+  "ProductDetailPage.backToProductsBtn": {
+    "selector": "[data-test='back-to-products']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByRole('button', { name: 'Back to products' })"],
+    "deprecated": []
+  },
+  "CartPage.cartItems": {
+    "selector": "[data-test='inventory-item']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".cart_item"],
+    "deprecated": []
+  },
+  "CartPage.continueShoppingBtn": {
+    "selector": "[data-test='continue-shopping']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByRole('button', { name: 'Continue Shopping' })"],
+    "deprecated": []
+  },
+  "CartPage.cartTitle": {
+    "selector": "[data-test='title']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".title"],
+    "deprecated": []
+  },
+  "CartPage.checkoutBtn": {
+    "selector": "[data-test='checkout']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByRole('button', { name: 'Checkout' })"],
+    "deprecated": []
+  },
+  "CartPage.cartBadge": {
+    "selector": "[data-test='shopping-cart-badge']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".shopping_cart_badge"],
+    "deprecated": []
+  },
+  "CartPage.itemName": {
+    "selector": "[data-test='inventory-item-name'] scoped to [data-test='inventory-item'].nth(n)",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".inventory_item_name"],
+    "deprecated": []
+  },
+  "CartPage.itemDescription": {
+    "selector": "[data-test='inventory-item-desc'] scoped to [data-test='inventory-item'].nth(n)",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".inventory_item_desc"],
+    "deprecated": []
+  },
+  "CartPage.itemPrice": {
+    "selector": "[data-test='inventory-item-price'] scoped to [data-test='inventory-item'].nth(n)",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".inventory_item_price"],
+    "deprecated": []
+  },
+  "CartPage.itemQuantity": {
+    "selector": "[data-test='item-quantity'] scoped to [data-test='inventory-item'].nth(n)",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".cart_quantity"],
+    "deprecated": []
+  },
+  "CartPage.removeButton": {
+    "selector": "getByRole('button', { name: 'Remove' }) scoped to [data-test='inventory-item'].nth(n)",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["[data-test^='remove']"],
+    "deprecated": []
+  },
+  "ProductPage.productDescription": {
+    "selector": "[data-test='inventory-item-desc'] scoped to [data-test='inventory-item'].nth(n)",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".inventory_item_desc"],
+    "deprecated": []
+  },
+  "ProductPage.productPrice": {
+    "selector": "[data-test='inventory-item-price'] scoped to [data-test='inventory-item'].nth(n)",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".inventory_item_price"],
+    "deprecated": []
+  },
+  "ProductPage.pageTitle": {
+    "selector": "[data-test='title']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".title"],
+    "deprecated": []
+  },
+  "CheckoutStepOnePage.firstNameInput": {
+    "selector": "[data-test='firstName']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByPlaceholder('First Name')", "#first-name"],
+    "deprecated": []
+  },
+  "CheckoutStepOnePage.lastNameInput": {
+    "selector": "[data-test='lastName']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByPlaceholder('Last Name')", "#last-name"],
+    "deprecated": []
+  },
+  "CheckoutStepOnePage.postalCodeInput": {
+    "selector": "[data-test='postalCode']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByPlaceholder('Zip/Postal Code')", "#postal-code"],
+    "deprecated": []
+  },
+  "CheckoutStepOnePage.continueBtn": {
+    "selector": "[data-test='continue']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["input[type='submit'][value='Continue']", "#continue"],
+    "deprecated": []
+  },
+  "CheckoutStepOnePage.cancelBtn": {
+    "selector": "[data-test='cancel']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByRole('button', { name: 'Cancel' })", "#cancel"],
+    "deprecated": []
+  },
+  "CheckoutStepOnePage.errorMessage": {
+    "selector": "[data-test='error']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["h3.error-message-container"],
+    "deprecated": []
+  },
+  "CheckoutStepTwoPage.cartItems": {
+    "selector": "[data-test='inventory-item']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".cart_item"],
+    "deprecated": []
+  },
+  "CheckoutStepTwoPage.subtotalLabel": {
+    "selector": "[data-test='subtotal-label']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".summary_subtotal_label"],
+    "deprecated": []
+  },
+  "CheckoutStepTwoPage.taxLabel": {
+    "selector": "[data-test='tax-label']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".summary_tax_label"],
+    "deprecated": []
+  },
+  "CheckoutStepTwoPage.totalLabel": {
+    "selector": "[data-test='total-label']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".summary_total_label"],
+    "deprecated": []
+  },
+  "CheckoutStepTwoPage.finishBtn": {
+    "selector": "[data-test='finish']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByRole('button', { name: 'Finish' })"],
+    "deprecated": []
+  },
+  "CheckoutStepTwoPage.cancelBtn": {
+    "selector": "[data-test='cancel']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByRole('button', { name: 'Cancel' })"],
+    "deprecated": []
+  },
+  "CheckoutCompletePage.completeHeader": {
+    "selector": "[data-test='complete-header']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["h2.complete-header"],
+    "deprecated": []
+  },
+  "CheckoutCompletePage.completeText": {
+    "selector": "[data-test='complete-text']",
+    "lastVerified": "2026-05-16",
+    "alternatives": [".complete-text"],
+    "deprecated": []
+  },
+  "CheckoutCompletePage.backHomeBtn": {
+    "selector": "[data-test='back-to-products']",
+    "lastVerified": "2026-05-16",
+    "alternatives": ["getByRole('button', { name: 'Back Home' })"],
+    "deprecated": []
+  }
+}
