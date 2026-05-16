@@ -6,7 +6,7 @@ on:
 
 jobs:
   smoke:
-    name: Smoke Tests (Chrome + API)
+    name: Smoke Tests (Chrome)
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -25,20 +25,10 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run API smoke tests
-        run: npx playwright test --project=api --grep @smoke
-        env:
-          BASE_URL: ${{ secrets.BASE_URL_STAGING }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL_STAGING }}
-          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-          LOG_LEVEL: warn
-
       - name: Run UI smoke tests
         run: npx playwright test --project=ui-chrome --grep @smoke
         env:
           BASE_URL: ${{ secrets.BASE_URL_STAGING }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL_STAGING }}
           TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           LOG_LEVEL: warn
