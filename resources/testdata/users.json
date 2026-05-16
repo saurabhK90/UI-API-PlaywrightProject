@@ -1,0 +1,27 @@
+{
+  "_comment": "Static test user definitions. Real passwords come from .env, not here. Update emails to match your test environment.",
+  "standardUser": {
+    "email": "standard-user@testenv.com",
+    "role": "standard",
+    "_password_env": "TEST_PASSWORD",
+    "_note": "Primary test user — auth state saved by globalSetup for all non-login tests"
+  },
+  "lockedUser": {
+    "email": "locked_out_user",
+    "role": "admin",
+    "_password_env": "ADMIN_PASSWORD",
+    "_note": "user who account is locked"
+  },
+  "errorUser": {
+    "email": "error_user",
+    "role": "standard",
+    "_password_env": "TEST_PASSWORD",
+    "_note": "Used ONLY in login.smoke.spec.ts — never used in other tests"
+  },
+  "problemUser": {
+    "email": "problem_user",
+    "role": "standard",
+    "_password_env": "TEST_PASSWORD",
+    "_note": "Used in product page tests — simulates a user with rendering/display problems"
+  }
+}

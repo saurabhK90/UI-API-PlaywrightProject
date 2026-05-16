@@ -1,0 +1,177 @@
+[
+  {
+    "testCaseId": "TC-CK-001",
+    "title": "Standard user proceeds from checkout step 1 to step 2 with valid form data",
+    "description": "Verify that a standard user can fill all checkout form fields and successfully navigate to the checkout overview page (step 2).",
+    "severity": "CRITICAL",
+    "tags": ["smoke", "regression"],
+    "feature": "Checkout",
+    "story": "Checkout Step 1 - Information",
+    "dataConditions": {
+      "user": "standard_user",
+      "firstName": "John",
+      "lastName": "Doe",
+      "zipCode": "10001",
+      "precondition": "At least one item added to cart before navigating to checkout"
+    },
+    "steps": [
+      "1. Log in as standard_user and add at least one product to the cart.",
+      "2. Click the cart icon and navigate to the Cart page.",
+      "3. Click 'Checkout'.",
+      "4. On Checkout Step 1, enter 'John' in the First Name field.",
+      "5. Enter 'Doe' in the Last Name field.",
+      "6. Enter '10001' in the Zip/Postal Code field.",
+      "7. Click the 'Continue' button."
+    ],
+    "expectedResult": "User is navigated to Checkout Step 2 (checkout-step-two). The page heading or URL reflects step 2.",
+    "actualResult": ""
+  },
+  {
+    "testCaseId": "TC-CK-002",
+    "title": "Checkout step 2 displays the correct items and accurate order total including tax",
+    "description": "Verify that the checkout overview page shows the same items that were in the cart, and that the item total, tax, and grand total are all mathematically correct.",
+    "severity": "CRITICAL",
+    "tags": ["smoke", "regression"],
+    "feature": "Checkout",
+    "story": "Checkout Step 2 - Overview",
+    "dataConditions": {
+      "user": "standard_user",
+      "product": "Sauce Labs Backpack (or any product with a known unit price)",
+      "precondition": "Standard user has completed checkout step 1 with the specific product in the cart"
+    },
+    "steps": [
+      "1. Log in as standard_user.",
+      "2. Add a specific product (e.g., 'Sauce Labs Backpack') to the cart and note its price.",
+      "3. Navigate to the Cart page and click 'Checkout'.",
+      "4. Complete the Checkout Step 1 form with valid data and click 'Continue'.",
+      "5. On Checkout Step 2, verify the product list contains the same item added in step 2.",
+      "6. Read the displayed 'Item total', 'Tax', and 'Total' values.",
+      "7. Calculate expected item total = sum of all individual product prices.",
+      "8. Calculate expected grand total = item total + tax."
+    ],
+    "expectedResult": "The same product is listed on the overview page with matching product name. Displayed 'Item total' equals the sum of all individual product prices. Displayed 'Total' equals item total plus tax.",
+    "actualResult": ""
+  },
+  {
+    "testCaseId": "TC-CK-003",
+    "title": "Standard user sees thank you confirmation message after completing purchase",
+    "description": "Verify that clicking 'Finish' on checkout step 2 navigates the user to the checkout complete page containing a thank you greeting.",
+    "severity": "CRITICAL",
+    "tags": ["smoke", "regression"],
+    "feature": "Checkout",
+    "story": "Checkout Complete",
+    "dataConditions": {
+      "user": "standard_user",
+      "precondition": "Standard user is on Checkout Step 2 with items visible in the order summary"
+    },
+    "steps": [
+      "1. Log in as standard_user.",
+      "2. Add a product to the cart and proceed through Checkout Step 1 with valid data.",
+      "3. On Checkout Step 2, verify order summary is displayed.",
+      "4. Click the 'Finish' button."
+    ],
+    "expectedResult": "User is redirected to the checkout complete page. The page contains a thank you greeting (e.g., 'Thank you for your order!' or similar confirmation text).",
+    "actualResult": ""
+  },
+  {
+    "testCaseId": "TC-CK-004",
+    "title": "Continue button shows first name required error when all fields are left empty",
+    "description": "Verify that clicking Continue with all form fields empty displays a validation error for the First Name field and keeps the user on Checkout Step 1.",
+    "severity": "NORMAL",
+    "tags": ["regression"],
+    "feature": "Checkout",
+    "story": "Checkout Step 1 - Form Validation",
+    "dataConditions": {
+      "user": "standard_user",
+      "firstName": "",
+      "lastName": "",
+      "zipCode": "",
+      "precondition": "Standard user is on Checkout Step 1 with all form fields empty"
+    },
+    "steps": [
+      "1. Log in as standard_user and add at least one product to the cart.",
+      "2. Navigate to Checkout Step 1.",
+      "3. Leave the First Name, Last Name, and Zip/Postal Code fields empty.",
+      "4. Click the 'Continue' button."
+    ],
+    "expectedResult": "A validation error message is displayed indicating the First Name field is required (e.g., 'Error: First Name is required'). The user remains on Checkout Step 1.",
+    "actualResult": ""
+  },
+  {
+    "testCaseId": "TC-CK-005",
+    "title": "Continue button shows last name required error when last name is missing",
+    "description": "Verify that submitting the checkout form with first name and zip filled but last name omitted triggers a last name validation error.",
+    "severity": "NORMAL",
+    "tags": ["regression"],
+    "feature": "Checkout",
+    "story": "Checkout Step 1 - Form Validation",
+    "dataConditions": {
+      "user": "standard_user",
+      "firstName": "John",
+      "lastName": "",
+      "zipCode": "10001",
+      "precondition": "Standard user is on Checkout Step 1"
+    },
+    "steps": [
+      "1. Log in as standard_user and navigate to Checkout Step 1.",
+      "2. Enter 'John' in the First Name field.",
+      "3. Leave the Last Name field empty.",
+      "4. Enter '10001' in the Zip/Postal Code field.",
+      "5. Click the 'Continue' button."
+    ],
+    "expectedResult": "A validation error message is displayed indicating the Last Name field is required (e.g., 'Error: Last Name is required'). The user remains on Checkout Step 1.",
+    "actualResult": ""
+  },
+  {
+    "testCaseId": "TC-CK-006",
+    "title": "Continue button shows postal code required error when zip code is missing",
+    "description": "Verify that submitting the checkout form with first name and last name filled but zip code omitted triggers a postal code validation error.",
+    "severity": "NORMAL",
+    "tags": ["regression"],
+    "feature": "Checkout",
+    "story": "Checkout Step 1 - Form Validation",
+    "dataConditions": {
+      "user": "standard_user",
+      "firstName": "John",
+      "lastName": "Doe",
+      "zipCode": "",
+      "precondition": "Standard user is on Checkout Step 1"
+    },
+    "steps": [
+      "1. Log in as standard_user and navigate to Checkout Step 1.",
+      "2. Enter 'John' in the First Name field.",
+      "3. Enter 'Doe' in the Last Name field.",
+      "4. Leave the Zip/Postal Code field empty.",
+      "5. Click the 'Continue' button."
+    ],
+    "expectedResult": "A validation error message is displayed indicating the Postal Code field is required (e.g., 'Error: Postal Code is required'). The user remains on Checkout Step 1.",
+    "actualResult": ""
+  },
+  {
+    "testCaseId": "TC-CK-007",
+    "title": "Problem user cannot complete checkout because last name field rejects input and Continue shows validation error",
+    "description": "Verify that for problem_user the Last Name field does not retain typed input, preventing form submission, and clicking Continue displays a relevant last name validation error.",
+    "severity": "CRITICAL",
+    "tags": ["regression"],
+    "feature": "Checkout",
+    "story": "Checkout Step 1 - Problem User Behaviour",
+    "dataConditions": {
+      "user": "problem_user",
+      "firstName": "Jane",
+      "attemptedLastName": "Smith",
+      "zipCode": "90210",
+      "precondition": "problem_user is logged in with at least one item in the cart"
+    },
+    "steps": [
+      "1. Log in as problem_user and add at least one product to the cart.",
+      "2. Navigate to Checkout Step 1.",
+      "3. Enter 'Jane' in the First Name field.",
+      "4. Attempt to type 'Smith' in the Last Name field.",
+      "5. Observe the value retained in the Last Name field after typing.",
+      "6. Enter '90210' in the Zip/Postal Code field.",
+      "7. Click the 'Continue' button."
+    ],
+    "expectedResult": "The Last Name field does not retain the typed input (field remains empty or clears immediately after entry). Clicking Continue displays a relevant validation error (e.g., 'Error: Last Name is required'). The user cannot proceed to Checkout Step 2.",
+    "actualResult": ""
+  }
+]

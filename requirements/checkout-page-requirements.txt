@@ -1,0 +1,20 @@
+For the application under test i.e Sauce Lab, the checkout page has been 
+implemented. We need to write positive and negative test cases for valid user 
+(standard user) and invalid (problem_user)
+
+Acceptance Criteria:
+
+1. Checkout page has form with FirstName, lastname and Zip field. 2 button continue 
+    and back.
+2. On clicking continue button user should be in checkout page 2,
+    a) User should see same item which was present in checkout page.
+    b) Item total should be correct ( item or items total + tax)
+    c) Clicking on Finish should take user to checkout complete page, It should have 
+        text thanks greeting.
+3. user should get relevant error message when continue button is clicked,
+    without providing value to any form field.
+4. problem user should not be able to fill last name and continue button    
+    should give relevant error message.
+
+
+        

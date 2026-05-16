@@ -33,3 +33,9 @@ src/api/models/*.generated.ts
 
 # TypeScript
 *.tsbuildinfo
+
+# Playwright MCP session snapshots
+.playwright-mcp/
+
+# Local Claude Code settings (machine-specific)
+.claude/settings.local.json

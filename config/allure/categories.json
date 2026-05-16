@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Product Defects",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*AssertionError.*|.*Expected.*received.*|.*toBeVisible.*|.*toHaveText.*|.*toHaveURL.*"
+  },
+  {
+    "name": "Test Infrastructure Failures",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*TimeoutError.*|.*net::ERR.*|.*ECONNREFUSED.*|.*ETIMEDOUT.*|.*waiting for locator.*"
+  },
+  {
+    "name": "Broken Tests",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*TypeError.*|.*Cannot read.*|.*is not a function.*|.*Cannot find module.*|.*SyntaxError.*"
+  },
+  {
+    "name": "API Contract Violations",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*ZodError.*|.*Schema validation failed.*|.*does not match the committed schema.*"
+  },
+  {
+    "name": "Performance Failures",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*exceeded the.*ms budget.*|.*response time.*"
+  }
+]

@@ -1,0 +1,11 @@
+For the application under test i.e Sauce Lab, the login page has been 
+implemented. We need to write positive and negative test cases for valid user 
+(standard user) 
+
+Acceptance Criteria:
+
+1. After successful login, user should be on Product catalog page and title
+    should be 'Swag Labs'
+2. Error message should be captured when invalid username or password is entered
+   for standard or valid user.
+3. Appropiate Error message should be captured for locked user.

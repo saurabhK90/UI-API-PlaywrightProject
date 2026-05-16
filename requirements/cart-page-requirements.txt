@@ -1,0 +1,15 @@
+For the application under test i.e Sauce Lab, the Cart page has been 
+implemented. We need to write positive and negative test cases for valid user 
+(standard user) and invalid (problem_user)
+
+Acceptance Criteria:
+
+1. cart page should display the same item or items details which
+    were added in product page.
+2. User should be able to remove item or items in the cart from cart page.
+3. user should be navigated back to Product page when 'continue shopping'
+    button is clicked.
+4. user should be navigated to checkout page when checkout button is clicked.
+
+
+        

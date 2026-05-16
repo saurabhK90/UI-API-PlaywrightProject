@@ -1,0 +1,306 @@
+{
+  "module": "Cart Page",
+  "application": "SauceLabs Demo",
+  "generatedDate": "2026-05-16",
+  "generatedFrom": "requirements/cart-page-requirements.txt",
+  "testCases": [
+    {
+      "testCaseId": "TC-CP-001",
+      "title": "Standard user sees correct details for a single item added from the Products page",
+      "description": "Verify that the cart page displays the exact product name, description, and price of a single item added on the Products page.",
+      "tags": ["smoke", "regression"],
+      "severity": "CRITICAL",
+      "feature": "Cart Page",
+      "story": "Display Cart Items",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in and on the Products page.",
+      "steps": [
+        "1. On the Products page, click 'Add to cart' for one product (e.g., 'Sauce Labs Backpack').",
+        "2. Click the cart icon in the header to navigate to the Cart page.",
+        "3. Observe the item listed in the cart."
+      ],
+      "expectedResult": "The cart page lists exactly one item. The product name, description, and price match what was shown on the Products page. The item quantity is 1.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "product": "any single product from the Products page"
+      }
+    },
+    {
+      "testCaseId": "TC-CP-002",
+      "title": "Standard user sees correct details for multiple items added from the Products page",
+      "description": "Verify that all products added on the Products page appear in the cart with correct names, descriptions, and prices.",
+      "tags": ["regression"],
+      "severity": "CRITICAL",
+      "feature": "Cart Page",
+      "story": "Display Cart Items",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in and on the Products page.",
+      "steps": [
+        "1. On the Products page, click 'Add to cart' for three different products.",
+        "2. Click the cart icon in the header to navigate to the Cart page.",
+        "3. Observe all items listed in the cart."
+      ],
+      "expectedResult": "The cart page lists all three items. Each item shows the correct product name, description, and price matching what was shown on the Products page. The cart badge count is 3.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "numberOfProducts": 3
+      }
+    },
+    {
+      "testCaseId": "TC-CP-003",
+      "title": "Problem user sees the correct item details on the cart page matching what was added from the Products page",
+      "description": "Verify that for problem_user, the cart page correctly displays the same product that was added — cart page display is not affected by the known product page image defect.",
+      "tags": ["regression"],
+      "severity": "CRITICAL",
+      "feature": "Cart Page",
+      "story": "Display Cart Items",
+      "userType": "problem_user",
+      "type": "positive",
+      "preconditions": "Problem user is logged in and on the Products page.",
+      "steps": [
+        "1. Log in as problem_user.",
+        "2. On the Products page, click 'Add to cart' for one product.",
+        "3. Click the cart icon in the header to navigate to the Cart page.",
+        "4. Observe the item name, description, and price shown in the cart."
+      ],
+      "expectedResult": "The cart page displays the correct product that was added, with matching name, description, and price. The cart page is not affected by the image defect present on the Products page.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "problem_user",
+        "password": "process.env.TEST_PASSWORD",
+        "product": "any single product from the Products page"
+      }
+    },
+    {
+      "testCaseId": "TC-CP-004",
+      "title": "Standard user removes a single item from the cart",
+      "description": "Verify that clicking 'Remove' for an item deletes it from the cart and updates the cart badge.",
+      "tags": ["smoke", "regression"],
+      "severity": "CRITICAL",
+      "feature": "Cart Page",
+      "story": "Remove Cart Items",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in. One product has been added to the cart. Cart page is displayed.",
+      "steps": [
+        "1. Navigate to the Cart page.",
+        "2. Confirm the product is listed in the cart.",
+        "3. Click the 'Remove' button for that product.",
+        "4. Observe the cart contents and cart badge."
+      ],
+      "expectedResult": "The removed item no longer appears in the cart. The cart badge count decrements by 1 and disappears when the cart is empty.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 1
+      }
+    },
+    {
+      "testCaseId": "TC-CP-005",
+      "title": "Standard user removes all items from the cart one by one and cart becomes empty",
+      "description": "Verify that removing every item individually leaves the cart in an empty state.",
+      "tags": ["regression"],
+      "severity": "NORMAL",
+      "feature": "Cart Page",
+      "story": "Remove Cart Items",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in. Three products have been added to the cart. Cart page is displayed.",
+      "steps": [
+        "1. Navigate to the Cart page.",
+        "2. Click 'Remove' for the first item.",
+        "3. Click 'Remove' for the second item.",
+        "4. Click 'Remove' for the third item.",
+        "5. Observe the cart page after all removals."
+      ],
+      "expectedResult": "All three items are removed. The cart is empty. The cart badge is absent (or shows 0). No item rows are visible on the Cart page.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 3
+      }
+    },
+    {
+      "testCaseId": "TC-CP-006",
+      "title": "Problem user can remove an item from the cart",
+      "description": "Verify that the 'Remove' button on the Cart page works correctly for problem_user — the known remove defect exists on the Products page only, not the Cart page.",
+      "tags": ["regression"],
+      "severity": "CRITICAL",
+      "feature": "Cart Page",
+      "story": "Remove Cart Items",
+      "userType": "problem_user",
+      "type": "positive",
+      "preconditions": "Problem user is logged in. At least one item has been added to the cart. Cart page is displayed.",
+      "steps": [
+        "1. Log in as problem_user.",
+        "2. Add one product to the cart on the Products page.",
+        "3. Navigate to the Cart page.",
+        "4. Click the 'Remove' button for that product.",
+        "5. Observe the cart contents and cart badge."
+      ],
+      "expectedResult": "The item is successfully removed from the cart. The cart badge count decrements by 1. The cart page reflects the removal correctly.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "problem_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 1
+      }
+    },
+    {
+      "testCaseId": "TC-CP-007",
+      "title": "Standard user is navigated to the Products page when 'Continue Shopping' is clicked",
+      "description": "Verify that the 'Continue Shopping' button on the Cart page redirects the user back to the Products page.",
+      "tags": ["smoke", "regression"],
+      "severity": "CRITICAL",
+      "feature": "Cart Page",
+      "story": "Continue Shopping Navigation",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in. Cart page is displayed.",
+      "steps": [
+        "1. Navigate to the Cart page.",
+        "2. Click the 'Continue Shopping' button.",
+        "3. Observe the page URL and page content."
+      ],
+      "expectedResult": "User is redirected to the Products listing page. The URL contains '/inventory.html'. The 'Products' heading is visible and all product listings are displayed.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD"
+      }
+    },
+    {
+      "testCaseId": "TC-CP-008",
+      "title": "Problem user is navigated to the Products page when 'Continue Shopping' is clicked",
+      "description": "Verify that the 'Continue Shopping' button works correctly for problem_user and navigates back to the Products page.",
+      "tags": ["regression"],
+      "severity": "NORMAL",
+      "feature": "Cart Page",
+      "story": "Continue Shopping Navigation",
+      "userType": "problem_user",
+      "type": "positive",
+      "preconditions": "Problem user is logged in. Cart page is displayed.",
+      "steps": [
+        "1. Log in as problem_user.",
+        "2. Navigate to the Cart page.",
+        "3. Click the 'Continue Shopping' button.",
+        "4. Observe the page URL and page content."
+      ],
+      "expectedResult": "User is redirected to the Products listing page. The URL contains '/inventory.html'. The 'Products' heading is visible.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "problem_user",
+        "password": "process.env.TEST_PASSWORD"
+      }
+    },
+    {
+      "testCaseId": "TC-CP-009",
+      "title": "Standard user is navigated to the Checkout page when 'Checkout' is clicked with items in cart",
+      "description": "Verify that clicking the 'Checkout' button with items present redirects the user to the Checkout step-one page.",
+      "tags": ["smoke", "regression"],
+      "severity": "CRITICAL",
+      "feature": "Cart Page",
+      "story": "Checkout Navigation",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in. At least one item is present in the cart. Cart page is displayed.",
+      "steps": [
+        "1. Navigate to the Cart page.",
+        "2. Confirm at least one item is in the cart.",
+        "3. Click the 'Checkout' button.",
+        "4. Observe the page URL and page content."
+      ],
+      "expectedResult": "User is redirected to the Checkout step-one page. URL contains '/checkout-step-one.html'. The form with First Name, Last Name, and Zip/Postal Code fields is visible.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 1
+      }
+    },
+    {
+      "testCaseId": "TC-CP-010",
+      "title": "Standard user can click Checkout with an empty cart",
+      "description": "Edge case — verify the application behaviour when 'Checkout' is clicked with no items in the cart.",
+      "tags": ["regression"],
+      "severity": "MINOR",
+      "feature": "Cart Page",
+      "story": "Checkout Navigation",
+      "userType": "standard_user",
+      "type": "edge",
+      "preconditions": "Standard user is logged in. Cart is empty. Cart page is displayed.",
+      "steps": [
+        "1. Navigate to the Cart page with no items added.",
+        "2. Confirm the cart shows no items.",
+        "3. Click the 'Checkout' button.",
+        "4. Observe the page URL and page content."
+      ],
+      "expectedResult": "Application navigates to '/checkout-step-one.html'. No items appear in the order summary on subsequent checkout steps.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "cartItemCount": 0
+      }
+    },
+    {
+      "testCaseId": "TC-CP-011",
+      "title": "Problem user is navigated to the Checkout page when 'Checkout' is clicked",
+      "description": "Verify that the 'Checkout' button works correctly for problem_user and navigates to the Checkout page.",
+      "tags": ["regression"],
+      "severity": "CRITICAL",
+      "feature": "Cart Page",
+      "story": "Checkout Navigation",
+      "userType": "problem_user",
+      "type": "positive",
+      "preconditions": "Problem user is logged in. At least one item is present in the cart. Cart page is displayed.",
+      "steps": [
+        "1. Log in as problem_user.",
+        "2. Navigate to the Cart page.",
+        "3. Confirm at least one item is in the cart.",
+        "4. Click the 'Checkout' button.",
+        "5. Observe the page URL and page content."
+      ],
+      "expectedResult": "User is redirected to the Checkout step-one page. URL contains '/checkout-step-one.html'. The checkout form is visible.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "problem_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 1
+      }
+    },
+    {
+      "testCaseId": "TC-CP-012",
+      "title": "Standard user cart items are still present after navigating to Products page and returning to cart",
+      "description": "Edge case — verify that cart item rows persist on the Cart page after the user navigates away via 'Continue Shopping' and returns via the cart icon.",
+      "tags": ["regression"],
+      "severity": "NORMAL",
+      "feature": "Cart Page",
+      "story": "Display Cart Items",
+      "userType": "standard_user",
+      "type": "edge",
+      "preconditions": "Standard user is logged in. Two products have been added to the cart. Cart page is displayed.",
+      "steps": [
+        "1. Navigate to the Cart page and confirm two items are listed.",
+        "2. Click the 'Continue Shopping' button to return to the Products page.",
+        "3. Click the cart icon to navigate back to the Cart page.",
+        "4. Observe the cart item rows."
+      ],
+      "expectedResult": "Both original items are still listed in the cart with correct names, descriptions, and prices. This is distinct from TC-PP-013 which asserts that the Products page badge and 'Remove' button state persist — this test asserts that the Cart page item rows themselves persist.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 2
+      }
+    }
+  ]
+}

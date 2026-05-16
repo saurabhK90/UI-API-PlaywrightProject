@@ -1,0 +1,338 @@
+{
+  "module": "Product Page",
+  "application": "SauceLabs Demo",
+  "generatedDate": "2026-05-16",
+  "generatedFrom": "requirements/prodct-page-requirements.txt",
+  "testCases": [
+    {
+      "testCaseId": "TC-PP-001",
+      "title": "Standard user adds a single product to cart and cart count increments to 1",
+      "description": "Verify that when a standard user adds one product to the cart, the cart badge count updates to 1.",
+      "tags": ["smoke", "regression"],
+      "severity": "CRITICAL",
+      "feature": "Product Page",
+      "story": "Add to Cart",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in and on the products page.",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Click the 'Add to cart' button on any single product.",
+        "3. Observe the cart icon badge in the top-right navigation."
+      ],
+      "expectedResult": "Cart badge displays the count '1'. The clicked product's button changes to 'Remove'.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "product": "any available product on the listing page"
+      }
+    },
+    {
+      "testCaseId": "TC-PP-002",
+      "title": "Standard user adds multiple products to cart and cart count matches items added",
+      "description": "Verify that adding N products to the cart results in the cart badge showing the count N.",
+      "tags": ["regression"],
+      "severity": "CRITICAL",
+      "feature": "Product Page",
+      "story": "Add to Cart",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in and on the products page. Cart is empty.",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Click 'Add to cart' on the first product.",
+        "3. Click 'Add to cart' on the second product.",
+        "4. Click 'Add to cart' on the third product.",
+        "5. Observe the cart icon badge count."
+      ],
+      "expectedResult": "Cart badge displays '3'. Each added product's button changes to 'Remove'.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "numberOfProducts": 3
+      }
+    },
+    {
+      "testCaseId": "TC-PP-003",
+      "title": "Standard user removes a single product from cart and cart count decrements by 1",
+      "description": "Verify that removing one product from the cart reduces the cart badge count by 1.",
+      "tags": ["regression"],
+      "severity": "CRITICAL",
+      "feature": "Product Page",
+      "story": "Remove from Cart",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in. Two products have been added to the cart (cart count = 2).",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Add two products to the cart.",
+        "3. Click the 'Remove' button on one of the added products.",
+        "4. Observe the cart icon badge count."
+      ],
+      "expectedResult": "Cart badge decrements from 2 to 1. The removed product's button reverts to 'Add to cart'.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 2,
+        "productsToRemove": 1
+      }
+    },
+    {
+      "testCaseId": "TC-PP-004",
+      "title": "Standard user removes multiple products from cart and count reduces accordingly",
+      "description": "Verify that removing multiple products reduces the cart badge count by the exact number of removed items.",
+      "tags": ["regression"],
+      "severity": "NORMAL",
+      "feature": "Product Page",
+      "story": "Remove from Cart",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in. Three products have been added to the cart (cart count = 3).",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Add three products to the cart.",
+        "3. Click 'Remove' on the first added product.",
+        "4. Observe cart count is now 2.",
+        "5. Click 'Remove' on the second added product.",
+        "6. Observe cart count is now 1."
+      ],
+      "expectedResult": "Cart badge decrements to 2 after first removal, then to 1 after second removal. Removed products revert to 'Add to cart'.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 3,
+        "productsToRemove": 2
+      }
+    },
+    {
+      "testCaseId": "TC-PP-005",
+      "title": "Standard user removes all products from cart and cart badge disappears",
+      "description": "Verify that removing all products from the cart results in no cart badge (or badge showing 0).",
+      "tags": ["regression"],
+      "severity": "NORMAL",
+      "feature": "Product Page",
+      "story": "Remove from Cart",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in. Two products have been added to the cart.",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Add two products to the cart (cart count = 2).",
+        "3. Click 'Remove' on the first product.",
+        "4. Click 'Remove' on the second product.",
+        "5. Observe the cart icon."
+      ],
+      "expectedResult": "Cart badge is no longer visible (or shows 0). Both product buttons revert to 'Add to cart'.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 2
+      }
+    },
+    {
+      "testCaseId": "TC-PP-006",
+      "title": "Standard user clicks a product name and is redirected to the product detail page",
+      "description": "Verify that clicking a product name navigates the standard user to the correct product detail page.",
+      "tags": ["smoke", "regression"],
+      "severity": "CRITICAL",
+      "feature": "Product Page",
+      "story": "Product Navigation",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in and on the products listing page.",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Note the name of the first visible product.",
+        "3. Click the product name link.",
+        "4. Observe the resulting page."
+      ],
+      "expectedResult": "User is redirected to the product detail page. The page title or heading matches the clicked product name. The product image corresponds to the selected product.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "product": "any product on listing page"
+      }
+    },
+    {
+      "testCaseId": "TC-PP-007",
+      "title": "Standard user clicks cart icon with 0 items and navigates to cart page",
+      "description": "Verify that the cart icon is clickable even when empty, and navigates to the cart page.",
+      "tags": ["smoke", "regression"],
+      "severity": "NORMAL",
+      "feature": "Product Page",
+      "story": "Cart Navigation",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in. Cart is empty (no items added).",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Confirm no items have been added to the cart (badge absent).",
+        "3. Click the cart icon in the top navigation."
+      ],
+      "expectedResult": "User is navigated to the cart page. The cart page shows an empty cart message.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "cartItemCount": 0
+      }
+    },
+    {
+      "testCaseId": "TC-PP-008",
+      "title": "Standard user clicks cart icon with one item and navigates to cart page",
+      "description": "Verify that the cart icon is clickable with one item in the cart and navigates to the cart page.",
+      "tags": ["smoke", "regression"],
+      "severity": "NORMAL",
+      "feature": "Product Page",
+      "story": "Cart Navigation",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in and has added exactly one item to the cart.",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Add one product to the cart.",
+        "3. Click the cart icon in the top navigation."
+      ],
+      "expectedResult": "User is navigated to the cart page. The cart page shows exactly the one added product.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "cartItemCount": 1
+      }
+    },
+    {
+      "testCaseId": "TC-PP-009",
+      "title": "Standard user clicks cart icon with multiple items and navigates to cart page",
+      "description": "Verify that the cart icon is clickable with multiple items and navigates to the cart page showing all added items.",
+      "tags": ["regression"],
+      "severity": "NORMAL",
+      "feature": "Product Page",
+      "story": "Cart Navigation",
+      "userType": "standard_user",
+      "type": "positive",
+      "preconditions": "Standard user is logged in and has added multiple items to the cart.",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Add three products to the cart.",
+        "3. Click the cart icon in the top navigation."
+      ],
+      "expectedResult": "User is navigated to the cart page. The cart page shows all three added products.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "cartItemCount": 3
+      }
+    },
+    {
+      "testCaseId": "TC-PP-010",
+      "title": "Problem user remove button does not reduce the cart quantity",
+      "description": "Verify that for the problem_user, clicking 'Remove' on a product does not decrement the cart badge count — a known defect.",
+      "tags": ["regression"],
+      "severity": "BLOCKER",
+      "feature": "Product Page",
+      "story": "Problem User Defects",
+      "userType": "problem_user",
+      "type": "negative",
+      "preconditions": "Problem user is logged in. One or more products have been added to the cart.",
+      "steps": [
+        "1. Log in as problem_user.",
+        "2. Navigate to the products listing page.",
+        "3. Add two products to the cart (observe cart count = 2).",
+        "4. Click the 'Remove' button on one of the added products.",
+        "5. Observe the cart badge count."
+      ],
+      "expectedResult": "Cart badge count does NOT decrement (remains at 2). This is the known defective behaviour for problem_user — removal has no effect on cart count.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "problem_user",
+        "password": "process.env.TEST_PASSWORD",
+        "initialCartCount": 2
+      }
+    },
+    {
+      "testCaseId": "TC-PP-011",
+      "title": "Problem user sees all product images as the same image across all listings",
+      "description": "Verify that all products on the listing page display the same image for problem_user.",
+      "tags": ["regression"],
+      "severity": "BLOCKER",
+      "feature": "Product Page",
+      "story": "Problem User Defects",
+      "userType": "problem_user",
+      "type": "negative",
+      "preconditions": "Problem user is logged in and on the products listing page.",
+      "steps": [
+        "1. Log in as problem_user.",
+        "2. Navigate to the products listing page.",
+        "3. Collect the `src` attribute of the image element for each listed product.",
+        "4. Compare all collected image src values."
+      ],
+      "expectedResult": "All product images share the same `src` URL — images are identical across all product cards.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "problem_user",
+        "password": "process.env.TEST_PASSWORD"
+      }
+    },
+    {
+      "testCaseId": "TC-PP-012",
+      "title": "Problem user clicking a product link sees an incorrect image on the detail page",
+      "description": "Verify that for problem_user, the product detail page displays a different (incorrect) image rather than the actual product image.",
+      "tags": ["regression"],
+      "severity": "BLOCKER",
+      "feature": "Product Page",
+      "story": "Problem User Defects",
+      "userType": "problem_user",
+      "type": "negative",
+      "preconditions": "Problem user is logged in and on the products listing page.",
+      "steps": [
+        "1. Log in as problem_user.",
+        "2. Navigate to the products listing page.",
+        "3. Note the product title for one product.",
+        "4. Click the product name link for that product.",
+        "5. On the detail page, capture the `src` attribute of the product image.",
+        "6. Compare with the expected image src for the correct product."
+      ],
+      "expectedResult": "The product detail page shows an image that does NOT correspond to the selected product. Image src differs from what a standard_user would see for the same product.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "problem_user",
+        "password": "process.env.TEST_PASSWORD",
+        "product": "any product on listing page"
+      }
+    },
+    {
+      "testCaseId": "TC-PP-013",
+      "title": "Standard user cart count remains consistent after navigating away and returning to the products page",
+      "description": "Edge case — verify that the cart count persists correctly when the user navigates to another page and returns to the products listing.",
+      "tags": ["regression"],
+      "severity": "NORMAL",
+      "feature": "Product Page",
+      "story": "Cart Persistence",
+      "userType": "standard_user",
+      "type": "edge",
+      "preconditions": "Standard user is logged in. Cart is empty.",
+      "steps": [
+        "1. Navigate to the products listing page.",
+        "2. Add two products to the cart (badge shows 2).",
+        "3. Click the cart icon to navigate to the cart page.",
+        "4. Click 'Continue Shopping' or navigate back to the products listing page.",
+        "5. Observe the cart badge count on the products page."
+      ],
+      "expectedResult": "Cart badge still shows '2'. Previously added products still display 'Remove' buttons.",
+      "actualResult": "",
+      "dataConditions": {
+        "user": "standard_user",
+        "password": "process.env.TEST_PASSWORD",
+        "cartItemCount": 2
+      }
+    }
+  ]
+}
