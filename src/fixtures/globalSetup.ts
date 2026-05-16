@@ -1,68 +1,75 @@
 import { chromium as playwrightChromium } from 'playwright-core'; // raw chromium — not affected by --headed CLI flag
-import { FullConfig, request } from '@playwright/test';
+import { FullConfig } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { Logger } from '@utils/Logger';
+import users from '@resources/testdata/users.json';
 
 dotenv.config();
 
 const log = Logger.getInstance();
 const AUTH_STATE_DIR = path.resolve('auth-state');
-const AUTH_STATE_PATH = path.join(AUTH_STATE_DIR, 'standard-user.json');
+const STANDARD_USER_AUTH_STATE_PATH = path.join(AUTH_STATE_DIR, 'standard-user.json');
+const PROBLEM_USER_AUTH_STATE_PATH = path.join(AUTH_STATE_DIR, 'problem-user.json');
 const ALLURE_RESULTS_DIR = path.resolve('allure-results');
 
 /**
  * Runs once before any worker starts.
- * Performs login once and saves storage state (cookies + localStorage) to disk.
- * Workers load this file rather than performing UI login — no login overhead per test.
- * To force re-authentication, delete auth-state/standard-user.json before running.
+ * Saves a storage state file per user role (cookies + localStorage) so tests
+ * load a pre-authenticated context instead of performing UI login each time.
+ * To force re-authentication for a user, delete their file under auth-state/.
  */
 export default async function globalSetup(_config: FullConfig): Promise<void> {
   fs.mkdirSync(AUTH_STATE_DIR, { recursive: true });
   cleanAllureResults();
 
-  // Reuse existing auth state only if cookies have not expired.
-  // Delete auth-state/standard-user.json to force a fresh login.
-  if (fs.existsSync(AUTH_STATE_PATH)) {
-    const saved = JSON.parse(fs.readFileSync(AUTH_STATE_PATH, 'utf-8')) as {
-      cookies?: { expires?: number }[];
-    };
-    const nowSec = Date.now() / 1000;
-    const hasExpired = saved.cookies?.some(c => typeof c.expires === 'number' && c.expires > 0 && c.expires < nowSec);
-    if (!hasExpired) {
-      log.info('Auth state exists and cookies are valid — skipping login');
-      return;
-    }
-    log.warn('Auth state exists but session cookies have expired — re-authenticating');
-    fs.unlinkSync(AUTH_STATE_PATH);
-  }
-
-  log.info('Global setup: creating auth state for standard user');
-
-  const username = process.env.TEST_USERNAME;
   const password = process.env.TEST_PASSWORD;
   const baseURL = process.env.BASE_URL;
 
-  if (!username || !password || !baseURL) {
-    throw new Error(
-      'Global setup failed: TEST_USERNAME, TEST_PASSWORD, and BASE_URL must be set in .env'
-    );
+  if (!password || !baseURL) {
+    throw new Error('Global setup failed: TEST_PASSWORD and BASE_URL must be set in .env');
   }
 
-  // Attempt API-based login first (faster — no browser overhead)
+  await ensureAuthState(users.standardUser.username, password, baseURL, STANDARD_USER_AUTH_STATE_PATH);
+  await ensureAuthState(users.problemUser.username, password, baseURL, PROBLEM_USER_AUTH_STATE_PATH);
+}
+
+async function ensureAuthState(
+  username: string,
+  password: string,
+  baseURL: string,
+  statePath: string
+): Promise<void> {
+  if (fs.existsSync(statePath)) {
+    const saved = JSON.parse(fs.readFileSync(statePath, 'utf-8')) as {
+      cookies?: { expires?: number }[];
+    };
+    const nowSec = Date.now() / 1000;
+    const hasExpired = saved.cookies?.some(
+      c => typeof c.expires === 'number' && c.expires > 0 && c.expires < nowSec
+    );
+    if (!hasExpired) {
+      log.info(`Auth state valid — skipping login for ${username}`);
+      return;
+    }
+    log.warn(`Auth state cookies expired — re-authenticating ${username}`);
+    fs.unlinkSync(statePath);
+  }
+
+  log.info(`Global setup: creating auth state for ${username}`);
+
   const apiBaseURL = process.env.API_BASE_URL ?? baseURL;
   const authState = await attemptAPILogin(apiBaseURL, username, password);
 
   if (authState) {
-    fs.writeFileSync(AUTH_STATE_PATH, JSON.stringify(authState, null, 2));
-    log.info(`Auth state saved via API login → ${AUTH_STATE_PATH}`);
+    fs.writeFileSync(statePath, JSON.stringify(authState, null, 2));
+    log.info(`Auth state saved via API login → ${statePath}`);
     return;
   }
 
-  // Fallback: browser-based login (use when there's no direct API login endpoint)
-  log.info('API login not available — falling back to browser-based login');
-  await browserLogin(baseURL, username, password);
+  log.info(`API login not available — falling back to browser-based login for ${username}`);
+  await browserLogin(baseURL, username, password, statePath);
 }
 
 function cleanAllureResults(): void {
@@ -82,6 +89,7 @@ async function attemptAPILogin(
   username: string,
   password: string
 ): Promise<object | null> {
+  const { request } = await import('@playwright/test');
   try {
     const apiContext = await request.newContext({ baseURL: apiBaseURL });
 
@@ -96,7 +104,6 @@ async function attemptAPILogin(
       return null;
     }
 
-    // Capture the full storage state from the API context (includes cookies set by the API)
     const state = await apiContext.storageState();
     await apiContext.dispose();
     return state;
@@ -106,7 +113,12 @@ async function attemptAPILogin(
   }
 }
 
-async function browserLogin(baseURL: string, username: string, password: string): Promise<void> {
+async function browserLogin(
+  baseURL: string,
+  username: string,
+  password: string,
+  statePath: string
+): Promise<void> {
   const browser = await playwrightChromium.launch({ headless: true });
   const context = await browser.newContext({ baseURL });
   const page = await context.newPage();
@@ -117,11 +129,10 @@ async function browserLogin(baseURL: string, username: string, password: string)
     await page.getByPlaceholder('Password').fill(password);
     await page.getByRole('button', { name: 'Login' }).click();
 
-    // Wait until the inventory page loads (confirms successful login)
     await page.waitForURL(/\/inventory\.html/, { timeout: 30_000 });
 
-    await context.storageState({ path: AUTH_STATE_PATH });
-    log.info(`Auth state saved via browser login → ${AUTH_STATE_PATH}`);
+    await context.storageState({ path: statePath });
+    log.info(`Auth state saved via browser login → ${statePath}`);
   } finally {
     await browser.close();
   }

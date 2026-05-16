@@ -7,9 +7,6 @@ import { Logger } from '@utils/Logger';
 
 const log = Logger.getInstance();
 
-const VALID_PASSWORD = process.env.TEST_PASSWORD!;
-const PROBLEM_USERNAME = process.env.PROBLEM_USERNAME!;
-
 // slowMo adds a pause after every Playwright action so headed runs are easy to follow.
 // Set SLOW_MO=0 in CI or when speed matters (e.g. SLOW_MO=0 npx playwright test ...).
 test.use({ launchOptions: { slowMo: parseInt(process.env.SLOW_MO ?? '0') } });
@@ -261,47 +258,42 @@ test.describe('Product Page - Cart Persistence', () => {
 
 test.describe('Product Page - Problem User Defects', () => {
 
-  test.beforeEach(async ({ page, loginPage }) => {
-    log.info('[TC-PP] Logging in as problem_user for defect verification');
-    // Clear standard_user session so problem_user can log in cleanly
-    await page.context().clearCookies();
-    await loginPage.navigateToLogin();
-    await loginPage.login(PROBLEM_USERNAME, VALID_PASSWORD);
-    // login() waits for /inventory.html — no extra navigation needed
+  test.beforeEach(async ({ problemUserProductPage }) => {
+    await problemUserProductPage.navigateToInventory();
   });
 
   test('problem user remove button does not reduce the cart quantity',
     { tag: '@regression' },
-    async ({ productPage }) => {
+    async ({ problemUserProductPage }) => {
       await allure.feature('Product Page');
       await allure.story('Problem User Defects');
       await allure.severity(Severity.BLOCKER);
       await allure.tag('regression');
 
       // --- Arrange ---
-      await productPage.addNProductsToCart(2);
-      const countBeforeRemove = await productPage.getCartCount();
+      await problemUserProductPage.addNProductsToCart(2);
+      const countBeforeRemove = await problemUserProductPage.getCartCount();
 
       // --- Act ---
-      await productPage.removeProductFromCartByIndex(0);
+      await problemUserProductPage.removeProductFromCartByIndex(0);
 
       // --- Assert ---
       // Known defect: Remove button has no effect on cart count for problem_user
-      const countAfterRemove = await productPage.getCartCount();
+      const countAfterRemove = await problemUserProductPage.getCartCount();
       test.expect(countBeforeRemove, 'cart count after adding 2 products').toBe(2);
       test.expect(countAfterRemove, 'cart count should remain 2 — Remove is broken for problem_user').toBe(2);
     });
 
   test('problem user sees all product images as the same image across all listings',
     { tag: '@regression' },
-    async ({ productPage }) => {
+    async ({ problemUserProductPage }) => {
       await allure.feature('Product Page');
       await allure.story('Problem User Defects');
       await allure.severity(Severity.BLOCKER);
       await allure.tag('regression');
 
       // --- Act ---
-      const imageSrcs = await productPage.getAllProductImageSrcs();
+      const imageSrcs = await problemUserProductPage.getAllProductImageSrcs();
 
       // --- Assert ---
       const uniqueSrcs = new Set(imageSrcs.filter(Boolean));
@@ -313,22 +305,22 @@ test.describe('Product Page - Problem User Defects', () => {
 
   test('problem user clicking a product link sees an incorrect image on the detail page',
     { tag: '@regression' },
-    async ({ productPage, productDetailPage }) => {
+    async ({ problemUserProductPage, problemUserProductDetailPage }) => {
       await allure.feature('Product Page');
       await allure.story('Problem User Defects');
       await allure.severity(Severity.BLOCKER);
       await allure.tag('regression');
 
       // --- Arrange ---
-      const listingImageSrcs = await productPage.getAllProductImageSrcs();
+      const listingImageSrcs = await problemUserProductPage.getAllProductImageSrcs();
       const listingImageForFirstProduct = listingImageSrcs[0];
 
       // --- Act ---
-      await productPage.clickProductByIndex(0);
+      await problemUserProductPage.clickProductByIndex(0);
 
       // --- Assert ---
       // For problem_user the detail page shows a different wrong image from what was on the listing
-      const detailImageSrc = await productDetailPage.getProductImageSrc();
+      const detailImageSrc = await problemUserProductDetailPage.getProductImageSrc();
       test.expect(
         detailImageSrc,
         'problem_user detail page image should not match the listing page image for the same product'

@@ -5,9 +5,10 @@ import { UIAssertions } from '@assertions/generic/UIAssertions';
 import { CheckoutPageExpectations } from '@assertions/domain';
 import { InventoryPageExpectations } from '@assertions/domain';
 import { Logger } from '@utils/Logger';
+import users from '@resources/testdata/users.json';
 
 const log = Logger.getInstance();
-const VALID_USERNAME = process.env.TEST_USERNAME!;
+const VALID_USERNAME = users.standardUser.username;
 const VALID_PASSWORD = process.env.TEST_PASSWORD!;
 
 // slowMo adds a pause after every Playwright action so headed runs are easy to follow.

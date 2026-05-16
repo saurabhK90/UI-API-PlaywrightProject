@@ -8,9 +8,9 @@ import users from '@resources/testdata/users.json';
 
 const log = Logger.getInstance();
 
-const VALID_USERNAME = process.env.TEST_USERNAME!;
+const VALID_USERNAME = users.standardUser.username;
 const VALID_PASSWORD = process.env.TEST_PASSWORD!;
-const LOCKED_USERNAME = users.lockedUser.email;
+const LOCKED_USERNAME = users.lockedUser.username;
 const INVALID_PASSWORD = 'wrong_password';
 const INVALID_USERNAME = 'invalid_user_xyz';
 
