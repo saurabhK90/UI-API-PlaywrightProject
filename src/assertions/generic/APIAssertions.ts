@@ -89,7 +89,6 @@ export class APIAssertions {
 
   static async assertResponseTime(response: APIResponse, maxMilliseconds: number): Promise<void> {
     await allure.step(`Assert response time is under ${maxMilliseconds}ms`, async () => {
-      // Playwright does not expose response duration directly — use a custom header if available
       const duration = parseInt(response.headers()['x-response-time'] ?? '0', 10);
       if (duration > 0) {
         expect(
@@ -134,6 +133,16 @@ export class APIAssertions {
       const body = await response.json() as unknown[];
       expect(Array.isArray(body)).toBe(true);
       expect(body.length).toBe(expectedLength);
+    });
+  }
+
+  static async assertContentType(response: APIResponse, expectedType: string): Promise<void> {
+    await allure.step(`Assert content-type contains "${expectedType}"`, async () => {
+      const actual = response.headers()['content-type'] ?? '';
+      expect(
+        actual,
+        `Expected content-type to contain "${expectedType}" but got "${actual}"`
+      ).toContain(expectedType);
     });
   }
 }

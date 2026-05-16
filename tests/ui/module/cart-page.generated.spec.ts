@@ -23,11 +23,11 @@ test.describe('Cart Page', () => {
     test('user sees correct details for a single item added from the Products page',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage }) => {
-      allure.feature('Cart Page');
-      allure.story('Display Cart Items');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Display Cart Items');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       const productName = await productPage.getProductNameTextByIndex(0);
@@ -52,10 +52,10 @@ test.describe('Cart Page', () => {
     test('user sees correct details for multiple items added from the Products page',
       { tag: '@regression' },
       async ({ productPage, cartPage }) => {
-      allure.feature('Cart Page');
-      allure.story('Display Cart Items');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Display Cart Items');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       const names = await Promise.all([0, 1, 2].map(i => productPage.getProductNameTextByIndex(i)));
@@ -83,11 +83,11 @@ test.describe('Cart Page', () => {
     test('user removes a single item from the cart',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage }) => {
-      allure.feature('Cart Page');
-      allure.story('Remove Cart Items');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Remove Cart Items');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CP-004] Adding 1 product and navigating to cart page');
@@ -107,10 +107,10 @@ test.describe('Cart Page', () => {
     test('user removes all items from the cart one by one and cart becomes empty',
       { tag: '@regression' },
       async ({ productPage, cartPage }) => {
-      allure.feature('Cart Page');
-      allure.story('Remove Cart Items');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Remove Cart Items');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CP-005] Adding 3 products and navigating to cart page');
@@ -130,11 +130,11 @@ test.describe('Cart Page', () => {
     test('user is navigated to the Products page when Continue Shopping is clicked',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, page }) => {
-      allure.feature('Cart Page');
-      allure.story('Continue Shopping Navigation');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Continue Shopping Navigation');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CP-007] Navigating to cart page (empty cart)');
@@ -153,11 +153,11 @@ test.describe('Cart Page', () => {
     test('user is navigated to the Checkout page when Checkout is clicked with items in cart',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, page }) => {
-      allure.feature('Cart Page');
-      allure.story('Checkout Navigation');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Checkout Navigation');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CP-009] Adding 1 product and navigating to cart page');
@@ -176,10 +176,10 @@ test.describe('Cart Page', () => {
     test('user can click Checkout with an empty cart',
       { tag: '@regression' },
       async ({ productPage, cartPage, page }) => {
-      allure.feature('Cart Page');
-      allure.story('Checkout Navigation');
-      allure.severity(Severity.MINOR);
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Checkout Navigation');
+      await allure.severity(Severity.MINOR);
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CP-010] Navigating to cart page with empty cart (edge case)');
@@ -197,10 +197,10 @@ test.describe('Cart Page', () => {
     test('cart items persist after navigating to the Products page and returning to cart',
       { tag: '@regression' },
       async ({ productPage, cartPage }) => {
-      allure.feature('Cart Page');
-      allure.story('Display Cart Items');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Display Cart Items');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       const name0 = await productPage.getProductNameTextByIndex(0);
@@ -234,10 +234,10 @@ test.describe('Cart Page', () => {
     test('problem user sees correct item details on the cart page matching what was added from the Products page',
       { tag: '@regression' },
       async ({ productPage, cartPage }) => {
-      allure.feature('Cart Page');
-      allure.story('Display Cart Items');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Display Cart Items');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       const productName = await productPage.getProductNameTextByIndex(0);
@@ -259,10 +259,10 @@ test.describe('Cart Page', () => {
     test('problem user can remove an item from the cart',
       { tag: '@regression' },
       async ({ productPage, cartPage }) => {
-      allure.feature('Cart Page');
-      allure.story('Remove Cart Items');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Remove Cart Items');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CP-006] Problem user — adding product and navigating to cart page');
@@ -282,10 +282,10 @@ test.describe('Cart Page', () => {
     test('problem user is navigated to the Products page when Continue Shopping is clicked',
       { tag: '@regression' },
       async ({ productPage, cartPage, page }) => {
-      allure.feature('Cart Page');
-      allure.story('Continue Shopping Navigation');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Continue Shopping Navigation');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CP-008] Problem user — navigating to cart page');
@@ -304,10 +304,10 @@ test.describe('Cart Page', () => {
     test('problem user is navigated to the Checkout page when Checkout is clicked',
       { tag: '@regression' },
       async ({ productPage, cartPage, page }) => {
-      allure.feature('Cart Page');
-      allure.story('Checkout Navigation');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('regression');
+      await allure.feature('Cart Page');
+      await allure.story('Checkout Navigation');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CP-011] Problem user — adding product and navigating to cart page');

@@ -26,11 +26,11 @@ test.describe('Order Placement', () => {
   test('user completes full order for a single item added from the product listing page', async ({
     loginPage, productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page,
   }) => {
-    allure.feature('Order Placement');
-    allure.story('Single Item via Product Listing Page');
-    allure.severity(Severity.CRITICAL);
-    allure.tag('e2e');
-    allure.tag('smoke');
+    await allure.feature('Order Placement');
+    await allure.story('Single Item via Product Listing Page');
+    await allure.severity(Severity.CRITICAL);
+    await allure.tag('e2e');
+    await allure.tag('smoke');
 
     // --- Arrange ---
     log.info('[TC-E2E-001] Logging in and capturing reference product name and price from Products page');
@@ -82,11 +82,11 @@ test.describe('Order Placement', () => {
   test('user completes full order for multiple items all added from the product listing page', async ({
     loginPage, productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page,
   }) => {
-    allure.feature('Order Placement');
-    allure.story('Multiple Items via Product Listing Page');
-    allure.severity(Severity.CRITICAL);
-    allure.tag('e2e');
-    allure.tag('regression');
+    await allure.feature('Order Placement');
+    await allure.story('Multiple Items via Product Listing Page');
+    await allure.severity(Severity.CRITICAL);
+    await allure.tag('e2e');
+    await allure.tag('regression');
 
     // --- Arrange ---
     log.info('[TC-E2E-002] Logging in and capturing reference names and prices for 3 products from Products page');
@@ -154,11 +154,11 @@ test.describe('Order Placement', () => {
   test('user completes full order for a single item added from the product detail page', async ({
     loginPage, productPage, productDetailPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page,
   }) => {
-    allure.feature('Order Placement');
-    allure.story('Single Item via Product Detail Page');
-    allure.severity(Severity.CRITICAL);
-    allure.tag('e2e');
-    allure.tag('regression');
+    await allure.feature('Order Placement');
+    await allure.story('Single Item via Product Detail Page');
+    await allure.severity(Severity.CRITICAL);
+    await allure.tag('e2e');
+    await allure.tag('regression');
 
     // --- Arrange ---
     log.info('[TC-E2E-003] Logging in and navigating to first product detail page');
@@ -214,11 +214,11 @@ test.describe('Order Placement', () => {
   test('user completes full order for multiple items each added from individual product detail pages', async ({
     loginPage, productPage, productDetailPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page,
   }) => {
-    allure.feature('Order Placement');
-    allure.story('Multiple Items via Product Detail Pages');
-    allure.severity(Severity.CRITICAL);
-    allure.tag('e2e');
-    allure.tag('regression');
+    await allure.feature('Order Placement');
+    await allure.story('Multiple Items via Product Detail Pages');
+    await allure.severity(Severity.CRITICAL);
+    await allure.tag('e2e');
+    await allure.tag('regression');
 
     // --- Arrange ---
     log.info('[TC-E2E-004] Logging in and navigating to first product detail page');

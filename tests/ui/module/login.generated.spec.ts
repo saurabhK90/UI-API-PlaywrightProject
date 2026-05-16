@@ -25,11 +25,11 @@ test.describe('Login', () => {
   });
 
   test('standard user logs in and lands on product catalog page', { tag: ['@smoke', '@regression'] }, async ({ loginPage, page }) => {
-    allure.feature('Login');
-    allure.story('Successful Authentication');
-    allure.severity(Severity.CRITICAL);
-    allure.tag('smoke');
-    allure.tag('regression');
+    await allure.feature('Login');
+    await allure.story('Successful Authentication');
+    await allure.severity(Severity.CRITICAL);
+    await allure.tag('smoke');
+    await allure.tag('regression');
 
     // --- Act ---
     log.info('[TC-LP-001] Logging in with valid standard_user credentials');
@@ -41,10 +41,10 @@ test.describe('Login', () => {
   });
 
   test('user sees error when correct username but wrong password is entered', { tag: '@regression' }, async ({ loginPage }) => {
-    allure.feature('Login');
-    allure.story('Authentication Failure');
-    allure.severity(Severity.CRITICAL);
-    allure.tag('regression');
+    await allure.feature('Login');
+    await allure.story('Authentication Failure');
+    await allure.severity(Severity.CRITICAL);
+    await allure.tag('regression');
 
     // --- Act ---
     log.info('[TC-LP-002] Submitting login with valid username and wrong password');
@@ -58,10 +58,10 @@ test.describe('Login', () => {
   });
 
   test('user sees error when non-existent username is entered with valid password', { tag: '@regression' }, async ({ loginPage }) => {
-    allure.feature('Login');
-    allure.story('Authentication Failure');
-    allure.severity(Severity.NORMAL);
-    allure.tag('regression');
+    await allure.feature('Login');
+    await allure.story('Authentication Failure');
+    await allure.severity(Severity.NORMAL);
+    await allure.tag('regression');
 
     // --- Act ---
     log.info('[TC-LP-003] Submitting login with non-existent username');
@@ -75,10 +75,10 @@ test.describe('Login', () => {
   });
 
   test('locked user sees lockout error message on login attempt', { tag: '@regression' }, async ({ loginPage }) => {
-    allure.feature('Login');
-    allure.story('Account Lockout');
-    allure.severity(Severity.CRITICAL);
-    allure.tag('regression');
+    await allure.feature('Login');
+    await allure.story('Account Lockout');
+    await allure.severity(Severity.CRITICAL);
+    await allure.tag('regression');
 
     // --- Act ---
     log.info('[TC-LP-004] Submitting login as locked_out_user');
@@ -92,10 +92,10 @@ test.describe('Login', () => {
   });
 
   test('user sees validation error when username field is submitted empty', { tag: '@regression' }, async ({ loginPage }) => {
-    allure.feature('Login');
-    allure.story('Form Validation');
-    allure.severity(Severity.NORMAL);
-    allure.tag('regression');
+    await allure.feature('Login');
+    await allure.story('Form Validation');
+    await allure.severity(Severity.NORMAL);
+    await allure.tag('regression');
 
     // --- Act ---
     log.info('[TC-LP-005] Submitting login with empty username field');
@@ -108,10 +108,10 @@ test.describe('Login', () => {
   });
 
   test('user sees validation error when password field is submitted empty', { tag: '@regression' }, async ({ loginPage }) => {
-    allure.feature('Login');
-    allure.story('Form Validation');
-    allure.severity(Severity.NORMAL);
-    allure.tag('regression');
+    await allure.feature('Login');
+    await allure.story('Form Validation');
+    await allure.severity(Severity.NORMAL);
+    await allure.tag('regression');
 
     // --- Act ---
     log.info('[TC-LP-006] Submitting login with empty password field');
@@ -124,10 +124,10 @@ test.describe('Login', () => {
   });
 
   test('user sees validation error when both fields are empty on login attempt', { tag: '@regression' }, async ({ loginPage }) => {
-    allure.feature('Login');
-    allure.story('Form Validation');
-    allure.severity(Severity.MINOR);
-    allure.tag('regression');
+    await allure.feature('Login');
+    await allure.story('Form Validation');
+    await allure.severity(Severity.MINOR);
+    await allure.tag('regression');
 
     // --- Act ---
     log.info('[TC-LP-007] Submitting login with both fields empty');

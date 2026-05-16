@@ -24,11 +24,11 @@ test.describe('Checkout', () => {
     test('user proceeds from checkout step 1 to step 2 with valid form data',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
-      allure.feature('Checkout');
-      allure.story('Checkout Step 1 - Information');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Checkout');
+      await allure.story('Checkout Step 1 - Information');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CK-001] Adding 1 product to cart and navigating to checkout step 1');
@@ -48,11 +48,11 @@ test.describe('Checkout', () => {
     test('checkout step 2 displays correct items and accurate order total including tax',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage }) => {
-      allure.feature('Checkout');
-      allure.story('Checkout Step 2 - Overview');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Checkout');
+      await allure.story('Checkout Step 2 - Overview');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       const itemName      = await productPage.getProductNameTextByIndex(0);
@@ -80,10 +80,10 @@ test.describe('Checkout', () => {
     test('checkout step 2 order total is correct when multiple items are added',
       { tag: '@regression' },
       async ({ productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage }) => {
-      allure.feature('Checkout');
-      allure.story('Checkout Step 2 - Overview');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('regression');
+      await allure.feature('Checkout');
+      await allure.story('Checkout Step 2 - Overview');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       const names      = await Promise.all([0, 1, 2].map(i => productPage.getProductNameTextByIndex(i)));
@@ -115,11 +115,11 @@ test.describe('Checkout', () => {
     test('user sees thank you confirmation message after completing purchase',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page }) => {
-      allure.feature('Checkout');
-      allure.story('Checkout Complete');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Checkout');
+      await allure.story('Checkout Complete');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CK-003] Adding 1 product and navigating through full checkout flow to step 2');
@@ -144,10 +144,10 @@ test.describe('Checkout', () => {
     test('Continue button shows first name required error when all fields are left empty',
       { tag: '@regression' },
       async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
-      allure.feature('Checkout');
-      allure.story('Checkout Step 1 - Form Validation');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Checkout');
+      await allure.story('Checkout Step 1 - Form Validation');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CK-004] Adding 1 product and navigating to checkout step 1 with all fields empty');
@@ -171,10 +171,10 @@ test.describe('Checkout', () => {
     test('Continue button shows last name required error when last name is missing',
       { tag: '@regression' },
       async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
-      allure.feature('Checkout');
-      allure.story('Checkout Step 1 - Form Validation');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Checkout');
+      await allure.story('Checkout Step 1 - Form Validation');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CK-005] Adding 1 product and navigating to checkout step 1');
@@ -200,10 +200,10 @@ test.describe('Checkout', () => {
     test('Continue button shows postal code required error when zip code is missing',
       { tag: '@regression' },
       async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
-      allure.feature('Checkout');
-      allure.story('Checkout Step 1 - Form Validation');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Checkout');
+      await allure.story('Checkout Step 1 - Form Validation');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CK-006] Adding 1 product and navigating to checkout step 1');
@@ -238,10 +238,10 @@ test.describe('Checkout', () => {
     test('problem user cannot complete checkout because last name field rejects input',
       { tag: '@regression' },
       async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
-      allure.feature('Checkout');
-      allure.story('Checkout Step 1 - Problem User Behaviour');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('regression');
+      await allure.feature('Checkout');
+      await allure.story('Checkout Step 1 - Problem User Behaviour');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       log.info('[TC-CK-007] Problem user — adding product and navigating to checkout step 1');

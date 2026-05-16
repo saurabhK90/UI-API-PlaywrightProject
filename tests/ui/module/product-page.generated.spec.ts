@@ -26,11 +26,11 @@ test.describe('Product Page - Add to Cart', () => {
   test('standard user adds a single product to cart and cart count increments to 1',
     { tag: ['@smoke', '@regression'] },
     async ({ productPage }) => {
-      allure.feature('Product Page');
-      allure.story('Add to Cart');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Add to Cart');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Act ---
       await productPage.addProductToCartByIndex(0);
@@ -43,10 +43,10 @@ test.describe('Product Page - Add to Cart', () => {
   test('standard user adds multiple products to cart and cart count matches items added',
     { tag: '@regression' },
     async ({ productPage }) => {
-      allure.feature('Product Page');
-      allure.story('Add to Cart');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Add to Cart');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('regression');
 
       // --- Act ---
       await productPage.addNProductsToCart(3);
@@ -70,10 +70,10 @@ test.describe('Product Page - Remove from Cart', () => {
   test('standard user removes a single product from cart and cart count decrements by 1',
     { tag: '@regression' },
     async ({ productPage }) => {
-      allure.feature('Product Page');
-      allure.story('Remove from Cart');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Remove from Cart');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       await productPage.addNProductsToCart(2);
@@ -89,10 +89,10 @@ test.describe('Product Page - Remove from Cart', () => {
   test('standard user removes multiple products from cart and count reduces after each removal',
     { tag: '@regression' },
     async ({ productPage }) => {
-      allure.feature('Product Page');
-      allure.story('Remove from Cart');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Remove from Cart');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       await productPage.addNProductsToCart(3);
@@ -109,10 +109,10 @@ test.describe('Product Page - Remove from Cart', () => {
   test('standard user removes all products from cart and cart badge disappears',
     { tag: '@regression' },
     async ({ productPage }) => {
-      allure.feature('Product Page');
-      allure.story('Remove from Cart');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Remove from Cart');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       await productPage.addNProductsToCart(2);
@@ -138,11 +138,11 @@ test.describe('Product Page - Product Navigation', () => {
   test('standard user clicks a product name and is redirected to the product detail page',
     { tag: ['@smoke', '@regression'] },
     async ({ productPage, productDetailPage, page }) => {
-      allure.feature('Product Page');
-      allure.story('Product Navigation');
-      allure.severity(Severity.CRITICAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Product Navigation');
+      await allure.severity(Severity.CRITICAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       const expectedProductName = await productPage.getProductNameTextByIndex(0);
@@ -168,11 +168,11 @@ test.describe('Product Page - Cart Navigation', () => {
   test('standard user clicks cart icon with 0 items and navigates to empty cart page',
     { tag: ['@smoke', '@regression'] },
     async ({ productPage, cartPage, page }) => {
-      allure.feature('Product Page');
-      allure.story('Cart Navigation');
-      allure.severity(Severity.NORMAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Cart Navigation');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       await UIAssertions.assertElementHidden(productPage.getCartBadgeLocator(), 'cart badge absent before navigation');
@@ -188,11 +188,11 @@ test.describe('Product Page - Cart Navigation', () => {
   test('standard user clicks cart icon with one item and navigates to cart page showing that item',
     { tag: ['@smoke', '@regression'] },
     async ({ productPage, cartPage, page }) => {
-      allure.feature('Product Page');
-      allure.story('Cart Navigation');
-      allure.severity(Severity.NORMAL);
-      allure.tag('smoke');
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Cart Navigation');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('smoke');
+      await allure.tag('regression');
 
       // --- Arrange ---
       await productPage.addProductToCartByIndex(0);
@@ -208,10 +208,10 @@ test.describe('Product Page - Cart Navigation', () => {
   test('standard user clicks cart icon with multiple items and navigates to cart page showing all items',
     { tag: '@regression' },
     async ({ productPage, cartPage, page }) => {
-      allure.feature('Product Page');
-      allure.story('Cart Navigation');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Cart Navigation');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       await productPage.addNProductsToCart(3);
@@ -236,10 +236,10 @@ test.describe('Product Page - Cart Persistence', () => {
   test('standard user cart count remains consistent after navigating away and returning to products page',
     { tag: '@regression' },
     async ({ productPage, cartPage, page }) => {
-      allure.feature('Product Page');
-      allure.story('Cart Persistence');
-      allure.severity(Severity.NORMAL);
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Cart Persistence');
+      await allure.severity(Severity.NORMAL);
+      await allure.tag('regression');
 
       // --- Arrange ---
       await productPage.addNProductsToCart(2);
@@ -273,10 +273,10 @@ test.describe('Product Page - Problem User Defects', () => {
   test('problem user remove button does not reduce the cart quantity',
     { tag: '@regression' },
     async ({ productPage }) => {
-      allure.feature('Product Page');
-      allure.story('Problem User Defects');
-      allure.severity(Severity.BLOCKER);
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Problem User Defects');
+      await allure.severity(Severity.BLOCKER);
+      await allure.tag('regression');
 
       // --- Arrange ---
       await productPage.addNProductsToCart(2);
@@ -295,10 +295,10 @@ test.describe('Product Page - Problem User Defects', () => {
   test('problem user sees all product images as the same image across all listings',
     { tag: '@regression' },
     async ({ productPage }) => {
-      allure.feature('Product Page');
-      allure.story('Problem User Defects');
-      allure.severity(Severity.BLOCKER);
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Problem User Defects');
+      await allure.severity(Severity.BLOCKER);
+      await allure.tag('regression');
 
       // --- Act ---
       const imageSrcs = await productPage.getAllProductImageSrcs();
@@ -314,10 +314,10 @@ test.describe('Product Page - Problem User Defects', () => {
   test('problem user clicking a product link sees an incorrect image on the detail page',
     { tag: '@regression' },
     async ({ productPage, productDetailPage }) => {
-      allure.feature('Product Page');
-      allure.story('Problem User Defects');
-      allure.severity(Severity.BLOCKER);
-      allure.tag('regression');
+      await allure.feature('Product Page');
+      await allure.story('Problem User Defects');
+      await allure.severity(Severity.BLOCKER);
+      await allure.tag('regression');
 
       // --- Arrange ---
       const listingImageSrcs = await productPage.getAllProductImageSrcs();

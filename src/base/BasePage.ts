@@ -285,12 +285,12 @@ export abstract class BasePage {
 
   // ─── Alert ─────────────────────────────────────────────────────────────────
 
-  async acceptAlert(): Promise<void> {
-    this.page.once('dialog', dialog => dialog.accept());
+  acceptAlert(): void {
+    this.page.once('dialog', dialog => { void dialog.accept(); });
   }
 
-  async dismissAlert(): Promise<void> {
-    this.page.once('dialog', dialog => dialog.dismiss());
+  dismissAlert(): void {
+    this.page.once('dialog', dialog => { void dialog.dismiss(); });
   }
 
   async getAlertText(): Promise<string> {

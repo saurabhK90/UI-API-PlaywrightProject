@@ -10,8 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
     "skipLibCheck": true,
     "baseUrl": ".",
@@ -26,6 +24,15 @@
       "@resources/*": ["resources/*"]
     }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "scripts/**/*.ts"],
+  "include": [
+    "src/base/**/*.ts",
+    "src/pages/**/*.ts",
+    "src/api/**/*.ts",
+    "src/assertions/**/*.ts",
+    "src/fixtures/**/*.ts",
+    "src/utils/**/*.ts",
+    "tests/**/*.ts",
+    "scripts/**/*.ts"
+  ],
   "exclude": ["node_modules", "dist", "allure-results", "allure-report", "playwright-report"]
 }
