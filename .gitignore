@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Environment files with real secrets
+.env
+.env.local
+.env.*.local
+
+# Test output
+allure-results/
+allure-report/
+playwright-report/
+test-results/
+dist/
+
+# Auth state (contains session cookies — never commit)
+auth-state/*.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Generated schemas (bootstrap only — review and commit manually)
+src/api/models/*.generated.ts
+
+# TypeScript
+*.tsbuildinfo
