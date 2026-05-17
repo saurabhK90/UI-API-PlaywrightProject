@@ -114,21 +114,21 @@ If an endpoint consistently exceeds the budget, flag it — do not increase the 
 
 ---
 
-## Contract Tests
+## Schema Validation in Regression Tests
 
-Contract tests live in `tests/api/contract/` and validate the API response shape against the committed Zod schema. They are the automated guard against undocumented API changes.
+Schema validation is applied inline within regression tests rather than as a separate test tier. Every test that calls a GET or POST endpoint asserts the response shape against the committed Zod schema.
 
 ```typescript
-test('User API response matches committed schema contract', async ({ userAPI }) => {
-  allure.tag('contract');
+test('API returns booking with correct schema', async ({ bookingAPI }) => {
+  allure.tag('regression');
 
-  const response = await userAPI.getUserById(TEST_USER_ID);
+  const response = await bookingAPI.getBookingById(id);
   await APIAssertions.assertStatus(response, 200);
-  await APIAssertions.assertResponseMatchesSchema(response, UserSchema);
+  await APIAssertions.assertResponseMatchesSchema(response, BookingSchema);
 });
 ```
 
-When the Zod schema validation fails with `ZodError`, Allure categorises it as "API Contract Violations" — visible to the team without reading error details.
+When Zod validation fails with `ZodError`, Allure surfaces it as a structured error — visible without reading raw JSON diffs.
 
 ---
 

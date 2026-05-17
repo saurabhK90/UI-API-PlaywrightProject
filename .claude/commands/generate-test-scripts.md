@@ -190,7 +190,7 @@ test.describe('<Feature Name>', () => {
     allure.feature('<Feature Name>');
     allure.story('<Story Name>');
     allure.severity(Severity.<LEVEL>);
-    allure.tag('<smoke|regression|contract|e2e>');
+    allure.tag('<smoke|regression|e2e>');
 
     // --- Arrange ---
     log.info('[TC-XX-NNN] <what is being captured or set up>');
