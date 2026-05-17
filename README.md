@@ -1,6 +1,11 @@
 # Saurabh.TestVagrant.AutomationSuite
 
+[![Smoke Tests](https://github.com/saurabhK90/UI-API-PlaywrightProject/actions/workflows/smoke.yml/badge.svg)](https://github.com/saurabhK90/UI-API-PlaywrightProject/actions/workflows/smoke.yml)
+[![Regression](https://github.com/saurabhK90/UI-API-PlaywrightProject/actions/workflows/regression.yml/badge.svg)](https://github.com/saurabhK90/UI-API-PlaywrightProject/actions/workflows/regression.yml)
+
 Enterprise-grade Playwright + TypeScript automation suite for UI and API testing. Covers smoke, regression, contract, and end-to-end scenarios.
+
+Tests the [Sauce Labs Demo App](https://www.saucedemo.com) (mock e-commerce storefront) for UI coverage and the [Restful Booker API](https://restful-booker.herokuapp.com) for API coverage.
 
 ---
 
@@ -13,6 +18,7 @@ Enterprise-grade Playwright + TypeScript automation suite for UI and API testing
 - [Team Onboarding Guide](#team-onboarding-guide)
 - [CI/CD Pipeline](#cicd-pipeline)
 - [Claude Code Skills](#claude-code-skills)
+- [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 
 ---
@@ -44,16 +50,24 @@ npx playwright install chromium
 cp .env.example .env
 ```
 
-Edit `.env` and fill in the three required values:
+Edit `.env` and fill in the values for your environment. Full variable reference:
 
-```dotenv
-BASE_URL=https://your-app-under-test.example.com
-TEST_USERNAME=your-test-user@example.com
-TEST_PASSWORD=your-test-password
-
-# Optional — defaults to BASE_URL when not set
-API_BASE_URL=https://api.your-app.example.com
-```
+| Variable | Required | Description |
+|---|---|---|
+| `BASE_URL` | Yes | UI base URL of the application under test |
+| `TEST_PASSWORD` | Yes | Password shared by all test users |
+| `API_BASE_URL` | No | REST API base URL — falls back to `BASE_URL` when not set |
+| `BOOKER_USERNAME` | API tests | Username for Restful Booker auth endpoint |
+| `BOOKER_PASSWORD` | API tests | Password for Restful Booker auth endpoint |
+| `ADMIN_USERNAME` | Setup/teardown | Admin account used for test data setup via API |
+| `ADMIN_PASSWORD` | Setup/teardown | Password for the admin account |
+| `GITHUB_TOKEN` | `/submit-pr` skill | Personal access token for creating PRs from Claude Code |
+| `JIRA_BASE_URL` | Jira skill | Your Atlassian instance URL (`https://yourorg.atlassian.net`) |
+| `JIRA_EMAIL` | Jira skill | Email address for Jira API authentication |
+| `JIRA_API_TOKEN` | Jira skill | Jira API token — generate at id.atlassian.com |
+| `LOG_LEVEL` | No | `debug` / `info` / `warn` — default `info`; use `debug` locally, `warn` in CI |
+| `SLOW_MO` | No | Milliseconds to pause after each Playwright action — useful for visual debugging |
+| `AUTH_STATE_DIR` | No | Path to auth state files — default `auth-state` |
 
 ```bash
 # 5. Verify everything works
@@ -71,9 +85,13 @@ npm run allure:generate && npm run allure:open
 
 | Command | What it runs |
 |---|---|
-| `npm run test:smoke` | UI smoke tests on Chrome — fast PR feedback |
-| `npm run test:regression` | Full UI regression suite on Chrome |
+| `npm run test:smoke` | UI + API smoke tests on Chrome — fast PR gate |
+| `npm run test:regression` | Full UI + API regression suite on Chrome |
+| `npm run test:e2e` | End-to-end user journey tests only |
 | `npm run test:api` | All API tests (no browser) |
+| `npm run test:ui:smoke` | UI @smoke tests only (no API) |
+| `npm run test:api:smoke` | API @smoke tests only (no browser) |
+| `npm run test:api:regression` | API @regression tests only |
 | `npm run test:headed` | Opens a visible browser — useful for local debugging |
 | `npm run test:debug` | Playwright Inspector with step-through debugging |
 | `npm run test:ui` | Playwright's interactive UI mode |
@@ -135,7 +153,8 @@ AutomationSuite/
 │   │   ├── generic/      UIAssertions.ts, APIAssertions.ts (reusable)
 │   │   └── domain/       Feature-specific message constants and assertions
 │   ├── fixtures/         Playwright fixture extensions (dependency injection)
-│   └── utils/            Pure TypeScript utilities — no Playwright imports
+│   ├── utils/            Pure TypeScript utilities — no Playwright imports
+│   └── ai/               Optional Anthropic SDK layer — removing it does not break any test
 │
 ├── tests/
 │   ├── ui/
@@ -149,6 +168,8 @@ AutomationSuite/
 │   │   └── contract/     Zod schema validation tests
 │   └── integration/      Tests combining UI + API assertions
 │
+├── auth-state/           Session files written by globalSetup — not committed to git
+│
 ├── resources/
 │   ├── testdata/         users.json, products.xlsx, orders.csv
 │   └── locator-registry/ locators.json — history for self-healing agent
@@ -157,7 +178,7 @@ AutomationSuite/
 │   ├── environments/     dev.env, staging.env, prod.env
 │   └── allure/           categories.json, environment.properties
 │
-├── scripts/              CLI tools (generate-schema, heal-locators, …)
+├── scripts/              CLI tools (generate-schema, heal-locators, patch-allure-async …)
 └── .github/
     └── workflows/        smoke.yml (PR gate), regression.yml (on merge)
 ```
@@ -381,6 +402,46 @@ allure.tag('contract');   // API schema validation tests
 allure.tag('e2e');        // end-to-end user journeys
 ```
 
+### Test User Types
+
+Four users are defined in `resources/testdata/users.json`. Each maps to a specific set of fixtures. Use the right user for the right scenario — do not mix them.
+
+| User | Fixtures | When to use |
+|---|---|---|
+| `standard_user` | `productPage`, `cartPage`, `checkoutStepOnePage`, `checkoutStepTwoPage`, `checkoutCompletePage`, `authenticatedPage` | All standard smoke and regression tests |
+| `problem_user` | `problemUserProductPage`, `problemUserCartPage`, `problemUserCheckoutStepOnePage`, `problemUserProductDetailPage` | Tests that verify the app handles UI rendering defects — broken images, misrouted buttons |
+| `locked_out_user` | `loginPage` | Login tests that verify the locked-account error message |
+| `error_user` | `loginPage` | Login tests that verify intermittent server error handling |
+
+`standard_user` and `problem_user` auth state is created by `globalSetup` before tests start. `locked_out_user` and `error_user` are never authenticated — they are used only in tests that explicitly call `loginPage.login()`.
+
+**Multi-user test example:**
+
+```typescript
+// Standard user — happy path
+test('user can add item to cart', async ({ productPage, cartPage }) => {
+  await productPage.addProductToCartByIndex(0);
+  await productPage.goToCart();
+  await UIAssertions.assertElementCount(cartPage.getCartItems(), 1);
+});
+
+// Problem user — same flow, different fixture, verifies defect behaviour
+test('problem user sees correct item image on product page', async ({ problemUserProductPage }) => {
+  allure.feature('Product Page');
+  allure.story('Problem User Rendering');
+  allure.severity(Severity.NORMAL);
+  allure.tag('regression');
+
+  // --- Assert ---
+  const src = await problemUserProductPage.getFirstProductImageSrc();
+  await expect(src).not.toContain('WithGarbageOnItToBreakTheUrl');
+});
+```
+
+### Generated Spec Files
+
+Files named `*.generated.spec.ts` are scaffolds produced by the `/generate-test-scripts` skill. They contain `TODO` comments where implementation is needed. Fill them in using the `/implement-tests` skill or manually — do not hand-edit the scaffold structure above the test bodies.
+
 ---
 
 ## CI/CD Pipeline
@@ -442,8 +503,10 @@ Push to main  (or manual trigger)
 |---|---|
 | `BASE_URL_STAGING` | Both workflows — UI base URL |
 | `API_BASE_URL_STAGING` | Both workflows — API base URL (falls back to BASE_URL) |
-| `TEST_USERNAME` | Both workflows — login email |
-| `TEST_PASSWORD` | Both workflows — login password |
+| `TEST_USERNAME` | Both workflows — login username for standard and problem users |
+| `TEST_PASSWORD` | Both workflows — shared password for all test users |
+| `BOOKER_USERNAME` | Both workflows — username for Restful Booker `/auth` endpoint |
+| `BOOKER_PASSWORD` | Both workflows — password for Restful Booker `/auth` endpoint |
 | `GITHUB_TOKEN` | Regression workflow — GitHub Pages deploy |
 
 ---
@@ -477,6 +540,57 @@ The rules directory contains reference documents that Claude Code skills read au
 | `adding-test-scripts.md` | Page Objects, API clients, fixtures, utilities |
 | `api-testing.md` | API client rules, Zod validation, contract tests |
 | `pr-checklist.md` | Full checklist run before any PR is merged |
+
+---
+
+## Troubleshooting
+
+### Global setup fails immediately
+
+```
+Error: Global setup failed: TEST_PASSWORD and BASE_URL must be set in .env
+```
+
+Copy `.env.example` to `.env` and fill in `BASE_URL` and `TEST_PASSWORD`. The file must exist — `globalSetup.ts` throws before launching any browser if these are absent.
+
+### Browser executable not found
+
+```
+browserType.launch: Executable doesn't exist at …/chromium
+```
+
+Run `npx playwright install chromium`. This is separate from `npm install` and must be run once per machine (and once per CI runner if not cached).
+
+### Tests show stale data or wrong user session
+
+`globalSetup` saves session files to `auth-state/` and reuses them on subsequent runs as long as the cookies have not expired. If a session is corrupted or the app was redeployed:
+
+```bash
+# Force re-authentication for all users
+rm auth-state/standard-user.json auth-state/problem-user.json
+npm run test:smoke
+```
+
+On Windows: `del auth-state\standard-user.json auth-state\problem-user.json`
+
+### Allure report is empty or shows no results
+
+`allure:generate` must be run before `allure:open`. Raw results land in `allure-results/` after each test run — they are not an HTML report.
+
+```bash
+npm run allure:generate   # converts allure-results/ → allure-report/
+npm run allure:open       # opens allure-report/ in a browser
+```
+
+If `allure-results/` itself is empty, the test run did not produce results (run was cancelled, or reporter misconfigured).
+
+### API tests fail with 401 / missing credentials
+
+Ensure `BOOKER_USERNAME` and `BOOKER_PASSWORD` are set in `.env` (local) or in GitHub Secrets (CI). These are separate from `TEST_USERNAME` / `TEST_PASSWORD` which are for the UI app.
+
+### `scripts/patch-allure-async.ts`
+
+This script patches a known async timing issue in the `allure-playwright` reporter that can cause result files to be written after the process exits. It is applied automatically via the `postinstall` npm hook — you do not need to run it manually.
 
 ---
 

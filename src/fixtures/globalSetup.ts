@@ -8,6 +8,11 @@ import users from '@resources/testdata/users.json';
 
 dotenv.config();
 
+// Clear log files before initialising the logger. Must happen here (module-level,
+// before Logger.getInstance()) so that the worker processes — which create their own
+// singleton in a separate Node.js context — open the files in append mode and do NOT
+// clobber the setup logs written by this global-setup process.
+Logger.clearLogs();
 const log = Logger.getInstance();
 const AUTH_STATE_DIR = path.resolve('auth-state');
 const STANDARD_USER_AUTH_STATE_PATH = path.join(AUTH_STATE_DIR, 'standard-user.json');
@@ -58,17 +63,6 @@ async function ensureAuthState(
   }
 
   log.info(`Global setup: creating auth state for ${username}`);
-
-  const apiBaseURL = process.env.API_BASE_URL ?? baseURL;
-  const authState = await attemptAPILogin(apiBaseURL, username, password);
-
-  if (authState) {
-    fs.writeFileSync(statePath, JSON.stringify(authState, null, 2));
-    log.info(`Auth state saved via API login → ${statePath}`);
-    return;
-  }
-
-  log.info(`API login not available — falling back to browser-based login for ${username}`);
   await browserLogin(baseURL, username, password, statePath);
 }
 
@@ -82,35 +76,6 @@ function cleanAllureResults(): void {
     }
   }
   if (removed > 0) log.info(`Allure results cleaned — removed ${removed} stale file(s)`);
-}
-
-async function attemptAPILogin(
-  apiBaseURL: string,
-  username: string,
-  password: string
-): Promise<object | null> {
-  const { request } = await import('@playwright/test');
-  try {
-    const apiContext = await request.newContext({ baseURL: apiBaseURL });
-
-    const response = await apiContext.post('/api/login', {
-      data: { username, password },
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (!response.ok()) {
-      log.warn(`API login returned ${response.status()} — will try browser login`);
-      await apiContext.dispose();
-      return null;
-    }
-
-    const state = await apiContext.storageState();
-    await apiContext.dispose();
-    return state;
-  } catch (err) {
-    log.warn('API login attempt failed', { error: String(err) });
-    return null;
-  }
 }
 
 async function browserLogin(

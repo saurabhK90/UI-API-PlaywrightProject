@@ -50,7 +50,7 @@ export default defineConfig({
       testMatch: 'tests/ui/**/*.spec.ts',
     },
 
-    // API tests — no browser launched, no storage state needed
+    // All API tests — tier selection (smoke/regression/e2e) is controlled via npm scripts
     {
       name: 'api',
       use: {

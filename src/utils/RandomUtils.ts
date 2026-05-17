@@ -95,4 +95,16 @@ export class RandomUtils {
   static generateCompanyName(): string {
     return faker.company.name();
   }
+
+  /** Returns a date exactly `daysOffset` days from today in YYYY-MM-DD format */
+  static generateFutureDate(daysOffset: number): string {
+    const date = new Date();
+    date.setDate(date.getDate() + daysOffset);
+    return date.toISOString().split('T')[0];
+  }
+
+  /** Random price integer between 50 and 1000 — suitable for booking totalprice */
+  static generatePrice(): number {
+    return faker.number.int({ min: 50, max: 1000 });
+  }
 }

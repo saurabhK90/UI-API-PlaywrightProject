@@ -24,7 +24,7 @@ test.describe('Order Placement', () => {
   // ─── TC-E2E-001 ────────────────────────────────────────────────────────────────
   // Critical path: single item added from the product listing page.
 
-  test('user completes full order for a single item added from the product listing page', async ({
+  test('Verify user sees order confirmation with correct pricing when a single item from the product listing page is added and full checkout is completed', async ({
     loginPage, productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page,
   }) => {
     await allure.feature('Order Placement');
@@ -80,7 +80,7 @@ test.describe('Order Placement', () => {
   // ─── TC-E2E-002 ────────────────────────────────────────────────────────────────
   // Critical path: three items added from the product listing page.
 
-  test('user completes full order for multiple items all added from the product listing page', async ({
+  test('Verify user sees order confirmation with correct pricing when multiple items from the product listing page are added and full checkout is completed', async ({
     loginPage, productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page,
   }) => {
     await allure.feature('Order Placement');
@@ -152,7 +152,7 @@ test.describe('Order Placement', () => {
   // ─── TC-E2E-003 ────────────────────────────────────────────────────────────────
   // Alternative path: single item added from the product detail page.
 
-  test('user completes full order for a single item added from the product detail page', async ({
+  test('Verify user sees order confirmation with correct pricing when a single item from the product detail page is added and full checkout is completed', async ({
     loginPage, productPage, productDetailPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page,
   }) => {
     await allure.feature('Order Placement');
@@ -212,7 +212,7 @@ test.describe('Order Placement', () => {
   // ─── TC-E2E-004 ────────────────────────────────────────────────────────────────
   // Alternative path: two items each added from their individual product detail pages.
 
-  test('user completes full order for multiple items each added from individual product detail pages', async ({
+  test('Verify user sees order confirmation with correct pricing when multiple items from individual product detail pages are added and full checkout is completed', async ({
     loginPage, productPage, productDetailPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page,
   }) => {
     await allure.feature('Order Placement');

@@ -24,7 +24,7 @@ test.describe('Login', () => {
     await loginPage.navigateToLogin();
   });
 
-  test('standard user logs in and lands on product catalog page', { tag: ['@smoke', '@regression'] }, async ({ loginPage, page }) => {
+  test('Verify user lands on the product catalog page when valid username and password are entered', { tag: ['@smoke', '@regression'] }, async ({ loginPage, page }) => {
     await allure.feature('Login');
     await allure.story('Successful Authentication');
     await allure.severity(Severity.CRITICAL);
@@ -40,7 +40,7 @@ test.describe('Login', () => {
     await UIAssertions.assertPageTitle(page, InventoryPageExpectations.TITLE);
   });
 
-  test('user sees error when correct username but wrong password is entered', { tag: '@regression' }, async ({ loginPage }) => {
+  test('Verify user sees credentials mismatch error when a valid username and an incorrect password are entered', { tag: '@regression' }, async ({ loginPage }) => {
     await allure.feature('Login');
     await allure.story('Authentication Failure');
     await allure.severity(Severity.CRITICAL);
@@ -57,7 +57,7 @@ test.describe('Login', () => {
     await UIAssertions.assertElementContainsText(loginPage.getErrorLocator(), LoginErrorMessages.CREDENTIALS_MISMATCH);
   });
 
-  test('user sees error when non-existent username is entered with valid password', { tag: '@regression' }, async ({ loginPage }) => {
+  test('Verify user sees credentials mismatch error when a non-existent username is entered with a valid password', { tag: '@regression' }, async ({ loginPage }) => {
     await allure.feature('Login');
     await allure.story('Authentication Failure');
     await allure.severity(Severity.NORMAL);
@@ -74,7 +74,7 @@ test.describe('Login', () => {
     await UIAssertions.assertElementContainsText(loginPage.getErrorLocator(), LoginErrorMessages.CREDENTIALS_MISMATCH);
   });
 
-  test('locked user sees lockout error message on login attempt', { tag: '@regression' }, async ({ loginPage }) => {
+  test('Verify user sees account locked error when login is attempted with a locked out account', { tag: '@regression' }, async ({ loginPage }) => {
     await allure.feature('Login');
     await allure.story('Account Lockout');
     await allure.severity(Severity.CRITICAL);
@@ -91,7 +91,7 @@ test.describe('Login', () => {
     await UIAssertions.assertElementContainsText(loginPage.getErrorLocator(), LoginErrorMessages.ACCOUNT_LOCKED);
   });
 
-  test('user sees validation error when username field is submitted empty', { tag: '@regression' }, async ({ loginPage }) => {
+  test('Verify user sees username required error when login is submitted with the username field empty', { tag: '@regression' }, async ({ loginPage }) => {
     await allure.feature('Login');
     await allure.story('Form Validation');
     await allure.severity(Severity.NORMAL);
@@ -107,7 +107,7 @@ test.describe('Login', () => {
     await UIAssertions.assertElementContainsText(loginPage.getErrorLocator(), LoginErrorMessages.USERNAME_REQUIRED);
   });
 
-  test('user sees validation error when password field is submitted empty', { tag: '@regression' }, async ({ loginPage }) => {
+  test('Verify user sees password required error when login is submitted with the password field empty', { tag: '@regression' }, async ({ loginPage }) => {
     await allure.feature('Login');
     await allure.story('Form Validation');
     await allure.severity(Severity.NORMAL);
@@ -123,7 +123,7 @@ test.describe('Login', () => {
     await UIAssertions.assertElementContainsText(loginPage.getErrorLocator(), LoginErrorMessages.PASSWORD_REQUIRED);
   });
 
-  test('user sees validation error when both fields are empty on login attempt', { tag: '@regression' }, async ({ loginPage }) => {
+  test('Verify user sees username required error when login is submitted with both username and password fields empty', { tag: '@regression' }, async ({ loginPage }) => {
     await allure.feature('Login');
     await allure.story('Form Validation');
     await allure.severity(Severity.MINOR);
