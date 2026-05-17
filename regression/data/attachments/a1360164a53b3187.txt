@@ -1,0 +1,1 @@
+[16:10:57.251] WARN    DELETE /booking/169 returned 403 {"responseBody":"Forbidden"}

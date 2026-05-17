@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/booking",
+    "body": {
+      "firstname": "Madelynn",
+      "lastname": "Lehner",
+      "totalprice": 347,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-06-06",
+        "checkout": "2026-06-11"
+      },
+      "additionalneeds": "Verecundia aranea termes."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "bookingid": 180,
+      "booking": {
+        "firstname": "Madelynn",
+        "lastname": "Lehner",
+        "totalprice": 347,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-06-06",
+          "checkout": "2026-06-11"
+        },
+        "additionalneeds": "Verecundia aranea termes."
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/booking",
+    "body": {
+      "firstname": "Filter5WfALnRO",
+      "lastname": "Keeling",
+      "totalprice": 804,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-02",
+        "checkout": "2026-07-08"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "bookingid": 176,
+      "booking": {
+        "firstname": "Filter5WfALnRO",
+        "lastname": "Keeling",
+        "totalprice": 804,
+        "depositpaid": true,
+        "bookingdates": {
+          "checkin": "2026-07-02",
+          "checkout": "2026-07-08"
+        }
+      }
+    }
+  }
+}

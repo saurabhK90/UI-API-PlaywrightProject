@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "endpoint": "/booking/167",
+    "body": null
+  },
+  "response": {
+    "status": 404,
+    "body": "Not Found"
+  }
+}

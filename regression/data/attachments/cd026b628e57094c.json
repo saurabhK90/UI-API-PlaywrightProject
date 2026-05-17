@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/booking",
+    "body": {
+      "firstname": "Veronica",
+      "lastname": "Romaguera",
+      "totalprice": 330,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-07-11",
+        "checkout": "2026-07-17"
+      },
+      "additionalneeds": "Deleo vorago annus."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "bookingid": 169,
+      "booking": {
+        "firstname": "Veronica",
+        "lastname": "Romaguera",
+        "totalprice": 330,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-07-11",
+          "checkout": "2026-07-17"
+        },
+        "additionalneeds": "Deleo vorago annus."
+      }
+    }
+  }
+}

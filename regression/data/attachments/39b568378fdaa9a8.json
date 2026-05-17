@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/auth",
+    "body": {
+      "username": "admin",
+      "password": "password123"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "token": "0329321f3ed6ba1"
+    }
+  }
+}
