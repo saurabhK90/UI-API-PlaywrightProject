@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/booking",
+    "body": {
+      "firstname": "Clarabelle",
+      "lastname": "Littel",
+      "totalprice": 909,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-07-11",
+        "checkout": "2026-07-14"
+      },
+      "additionalneeds": "Solio delectatio cursus."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "bookingid": 3748,
+      "booking": {
+        "firstname": "Clarabelle",
+        "lastname": "Littel",
+        "totalprice": 909,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-07-11",
+          "checkout": "2026-07-14"
+        },
+        "additionalneeds": "Solio delectatio cursus."
+      }
+    }
+  }
+}

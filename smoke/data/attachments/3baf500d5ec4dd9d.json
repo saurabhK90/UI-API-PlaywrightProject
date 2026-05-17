@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "DELETE",
-    "endpoint": "/booking/2347",
+    "endpoint": "/booking/3748",
     "body": null
   },
   "response": {

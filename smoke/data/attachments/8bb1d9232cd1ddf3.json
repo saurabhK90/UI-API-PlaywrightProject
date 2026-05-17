@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "endpoint": "/booking/3749",
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "firstname": "Mariano",
+      "lastname": "Hackett",
+      "totalprice": 297,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-06-02",
+        "checkout": "2026-06-04"
+      },
+      "additionalneeds": "Eaque vulgo autus."
+    }
+  }
+}

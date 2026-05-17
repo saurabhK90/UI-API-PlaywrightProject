@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "PUT",
+    "endpoint": "/booking/3754",
+    "body": {
+      "firstname": "Gregoria",
+      "lastname": "Metz",
+      "totalprice": 503,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-10",
+        "checkout": "2026-07-16"
+      },
+      "additionalneeds": "Suppono taceo conculco."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "firstname": "Gregoria",
+      "lastname": "Metz",
+      "totalprice": 503,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-10",
+        "checkout": "2026-07-16"
+      },
+      "additionalneeds": "Suppono taceo conculco."
+    }
+  }
+}
