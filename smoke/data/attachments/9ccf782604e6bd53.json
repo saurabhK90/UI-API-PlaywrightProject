@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "DELETE",
+    "endpoint": "/booking/2347",
+    "body": null
+  },
+  "response": {
+    "status": 201,
+    "body": "Created"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "endpoint": "/booking/2349",
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "firstname": "Maxwell",
+      "lastname": "Kub",
+      "totalprice": 350,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-05",
+        "checkout": "2026-07-11"
+      },
+      "additionalneeds": "Vigor cornu corrumpo."
+    }
+  }
+}
