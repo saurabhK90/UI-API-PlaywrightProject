@@ -59,15 +59,6 @@ export default defineConfig({
       testMatch: 'tests/api/**/*.spec.ts',
     },
 
-    // Integration tests combining UI + API assertions
-    {
-      name: 'integration',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: AUTH_STATE_PATH,
-      },
-      testMatch: 'tests/integration/**/*.spec.ts',
-    },
   ],
 
   // Allure and other generated output that should not be tracked

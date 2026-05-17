@@ -39,9 +39,8 @@ src/
   ai/             Optional Anthropic SDK layer (isolated, additive)
 
 tests/
-  ui/             smoke/ regression/ e2e/
-  api/            smoke/ regression/ contract/
-  integration/    Tests combining UI + API assertions
+  ui/             module/ e2e/
+  api/            booking/ e2e/
 
 resources/
   testdata/       users.json, products.xlsx, orders.csv
@@ -176,7 +175,7 @@ TEST_PASSWORD     Password for the standard test user
 
 ## Adding a New Test — Checklist
 
-1. Choose the right test directory: `tests/ui/`, `tests/api/`, or `tests/integration/`
+1. Choose the right test directory: `tests/ui/` for UI tests, `tests/api/` for API tests
 2. Import from `@fixtures/index`, not from `@playwright/test`
 3. Add `@allure.feature`, `@allure.story`, `@allure.severity` decorators
 4. Use page objects for all UI interactions — never call `page.locator()` directly in tests

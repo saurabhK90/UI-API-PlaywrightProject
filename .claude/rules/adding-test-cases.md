@@ -157,7 +157,6 @@ Use `enum` for closed sets of known strings (error messages). Use `const … as 
 ```typescript
 allure.tag('smoke');        // critical-path tests that run on every PR
 allure.tag('regression');   // full suite tests that run on merge + nightly
-allure.tag('contract');     // API schema validation tests
 allure.tag('e2e');          // end-to-end journey tests
 ```
 
@@ -172,10 +171,8 @@ A test can have multiple tags.
 | UI smoke | `tests/ui/smoke/` |
 | UI regression | `tests/ui/regression/` |
 | UI end-to-end journeys | `tests/ui/e2e/` |
-| API smoke | `tests/api/smoke/` |
-| API regression | `tests/api/regression/` |
-| API contract/schema | `tests/api/contract/` |
-| Tests combining UI + API | `tests/integration/` |
+| API smoke + regression | `tests/api/booking/` |
+| API end-to-end journeys | `tests/api/e2e/` |
 
 ---
 

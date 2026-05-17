@@ -55,7 +55,7 @@ These are machine-verified and must pass before push:
 
 ## API & Schema
 
-- [ ] Zod schema in `src/api/models/` updated if the API contract changed
+- [ ] Zod schema in `src/api/models/` updated if the API response shape changed
 - [ ] New API endpoint class extends `BaseAPI`
 - [ ] `generate-schema` script run for new endpoints to bootstrap the model
 

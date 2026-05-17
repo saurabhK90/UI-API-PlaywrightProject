@@ -3,7 +3,7 @@
 [![Smoke Tests](https://github.com/saurabhK90/UI-API-PlaywrightProject/actions/workflows/smoke.yml/badge.svg)](https://github.com/saurabhK90/UI-API-PlaywrightProject/actions/workflows/smoke.yml)
 [![Regression](https://github.com/saurabhK90/UI-API-PlaywrightProject/actions/workflows/regression.yml/badge.svg)](https://github.com/saurabhK90/UI-API-PlaywrightProject/actions/workflows/regression.yml)
 
-Enterprise-grade Playwright + TypeScript automation suite for UI and API testing. Covers smoke, regression, contract, and end-to-end scenarios.
+Enterprise-grade Playwright + TypeScript automation suite for UI and API testing. Covers smoke, regression, and end-to-end scenarios.
 
 Tests the [Sauce Labs Demo App](https://www.saucedemo.com) (mock e-commerce storefront) for UI coverage and the [Restful Booker API](https://restful-booker.herokuapp.com) for API coverage.
 
@@ -15,6 +15,7 @@ Tests the [Sauce Labs Demo App](https://www.saucedemo.com) (mock e-commerce stor
 - [Setup](#setup)
 - [Running Tests Locally](#running-tests-locally)
 - [Framework Architecture](#framework-architecture)
+- [API Test Strategy](#api-test-strategy)
 - [Team Onboarding Guide](#team-onboarding-guide)
 - [CI/CD Pipeline](#cicd-pipeline)
 - [Claude Code Skills](#claude-code-skills)
@@ -109,7 +110,6 @@ npx playwright test --grep @regression
 # By project
 npx playwright test --project=api
 npx playwright test --project=ui-chrome
-npx playwright test --project=integration
 ```
 
 ### Reports
@@ -163,10 +163,8 @@ AutomationSuite/
 │   │   ├── module/       Module-level generated tests
 │   │   └── e2e/          End-to-end user journeys
 │   ├── api/
-│   │   ├── smoke/        API health checks
-│   │   ├── regression/   Full API coverage
-│   │   └── contract/     Zod schema validation tests
-│   └── integration/      Tests combining UI + API assertions
+│   │   ├── booking/      Endpoint tests (auth, CRUD, list)
+│   │   └── e2e/          Full booking lifecycle journeys
 │
 ├── auth-state/           Session files written by globalSetup — not committed to git
 │
@@ -215,7 +213,6 @@ test('user sees error when password is wrong', async ({ loginPage }) => { ... })
 |---|---|---|---|
 | `ui-chrome` | Desktop Chrome | `tests/ui/**/*.spec.ts` | All UI tests with stored auth state |
 | `api` | None (HTTP only) | `tests/api/**/*.spec.ts` | API tests — no browser overhead |
-| `integration` | Desktop Chrome | `tests/integration/**/*.spec.ts` | Combined UI + API assertions |
 
 ### Configuration
 
@@ -249,6 +246,63 @@ All locators are `private readonly` class fields in the Page Object. Selection p
 3. Semantic text (`getByLabel`, `getByPlaceholder`, `getByText`)
 4. CSS selector with stable class names
 5. XPath — last resort, always document the reason in a comment
+
+---
+
+## API Test Strategy
+
+### Application Under Test
+
+The [Restful Booker API](https://restful-booker.herokuapp.com) — a training REST API for hotel booking management. Endpoints cover authentication, booking CRUD, and list filtering.
+
+### Test Layers
+
+| Layer | Tag | What it covers | Location |
+|---|---|---|---|
+| Smoke | `@smoke` | One positive per endpoint — fast PR health check | `tests/api/booking/` |
+| Regression | `@regression` | Full positive + negative + auth variant coverage | `tests/api/booking/` |
+| End-to-End | `@e2e` | Full booking lifecycle in a single test | `tests/api/e2e/` |
+
+### Endpoint Coverage
+
+| Endpoint | Positive scenarios | Negative scenarios |
+|---|---|---|
+| `POST /auth` | Valid credentials → token returned | Wrong credentials, empty body |
+| `GET /booking` | List all, filter by firstname (match) | Filter with no matching result → empty array |
+| `GET /booking/:id` | Valid ID → full schema match | Non-existent ID → 404 |
+| `POST /booking` | Full payload → booking ID + schema valid | Empty body → 500 |
+| `PUT /booking/:id` | Cookie token auth, Basic Auth | No auth credentials → 403 |
+| `DELETE /booking/:id` | Valid cookie token → 201 | No auth → 403; verify GET returns 404 after delete |
+
+### Schema Validation
+
+Every API client method returns a raw `APIResponse`. Tests validate the response body against a **Zod schema** in `src/api/models/BookingModel.ts`. Zod parses the JSON and throws a structured `ZodError` on shape mismatch — making API regressions visible without reading raw JSON diffs.
+
+```typescript
+const response = await bookingAPI.getBookingById(id);
+await APIAssertions.assertStatus(response, 200);
+await APIAssertions.assertResponseMatchesSchema(response, BookingSchema);
+```
+
+### Authentication Strategy
+
+Restful Booker supports two auth methods — both are exercised in the `PUT` tests:
+
+| Method | Header sent | How acquired |
+|---|---|---|
+| Cookie token | `Cookie: token=<value>` | `POST /auth` with `BOOKER_USERNAME` / `BOOKER_PASSWORD` |
+| Basic Auth | `Authorization: Basic <base64>` | Encoded from the same credentials at request time |
+
+The `BookerAuthAPI` fixture acquires a fresh token per test via `POST /auth`. There is no shared token state between tests.
+
+### Data Setup and Teardown
+
+Tests that need an existing booking (GET by ID, PUT, DELETE) create a **seed booking** in the arrange phase and record its ID. Cleanup:
+
+- **DELETE tests** — the test itself deletes the booking as the act under test
+- **Other tests** — the booking is orphaned; Restful Booker resets its data periodically
+
+No static booking IDs are hardcoded — every test generates a unique payload via `RandomUtils`.
 
 ---
 
@@ -398,7 +452,6 @@ export { CheckoutErrorMessages, CheckoutPageExpectations } from './CheckoutMessa
 ```typescript
 allure.tag('smoke');      // runs on every PR — must stay fast and stable
 allure.tag('regression'); // full suite — runs on merge and nightly
-allure.tag('contract');   // API schema validation tests
 allure.tag('e2e');        // end-to-end user journeys
 ```
 
@@ -455,22 +508,24 @@ Files named `*.generated.spec.ts` are scaffolds produced by the `/generate-test-
 ```
 Pull Request opened / updated
         │
-        ▼
-┌───────────────────────────┐
-│  Install + browser setup  │
-├───────────────────────────┤
-│  API smoke tests  @smoke  │
-├───────────────────────────┤
-│  UI smoke tests   @smoke  │
-└───────────────────────────┘
-        │
-        ▼
-  Upload allure-results + playwright-report as artifacts (7-day retention)
+        ├──────────────────────────┐
+        ▼                          ▼
+ smoke-api (10 min)        smoke-ui (20 min)
+ API @smoke tests          UI @smoke tests
+ No browser install        Chromium cached/installed
+        │                          │
+        └────────────┬─────────────┘
+                     ▼
+          Generate Allure report
+                     │
+                     ▼
+      Publish to GitHub Pages (/smoke)
 ```
 
-- Runs on `ubuntu-latest`, timeout 20 minutes
-- Uses `BASE_URL_STAGING`, `API_BASE_URL_STAGING`, `TEST_USERNAME`, `TEST_PASSWORD` from GitHub Secrets
-- Retries failing tests up to 2 times before marking the job failed
+- Jobs run in parallel — total wall-clock time equals the slower job (UI, ~20 min)
+- `smoke-api` skips Playwright browser install entirely
+- Allure results from both jobs are merged before report generation
+- Uses `BASE_URL_STAGING`, `TEST_USERNAME`, `TEST_PASSWORD`, `BOOKER_USERNAME`, `BOOKER_PASSWORD` from GitHub Secrets
 
 ### Regression — On Merge
 
@@ -538,7 +593,7 @@ The rules directory contains reference documents that Claude Code skills read au
 | `locator-strategy.md` | Locator priority and naming conventions |
 | `adding-test-cases.md` | Test anatomy, naming, Allure labels, tags |
 | `adding-test-scripts.md` | Page Objects, API clients, fixtures, utilities |
-| `api-testing.md` | API client rules, Zod validation, contract tests |
+| `api-testing.md` | API client rules, Zod schema validation, response time budgets |
 | `pr-checklist.md` | Full checklist run before any PR is merged |
 
 ---
@@ -626,7 +681,7 @@ Every pull request must complete the checklist in [.github/pull_request_template
 - Locator quality (data-testid / ARIA only)
 - Test quality (one concern per test, no hardcoded data)
 - Allure annotation completeness
-- API schema updated if contract changed
+- Zod schema in `src/api/models/` updated if the API response shape changed
 - Smoke tests passing locally
 
 ### Anti-Patterns (ESLint-enforced)
