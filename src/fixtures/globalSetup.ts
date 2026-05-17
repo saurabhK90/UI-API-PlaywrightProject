@@ -29,6 +29,14 @@ export default async function globalSetup(_config: FullConfig): Promise<void> {
   fs.mkdirSync(AUTH_STATE_DIR, { recursive: true });
   cleanAllureResults();
 
+  // Skip browser-based auth setup when Chromium is not installed on this machine.
+  // API-only CI jobs do not install browsers, so launching Chromium would crash.
+  const chromiumPath = playwrightChromium.executablePath();
+  if (!fs.existsSync(chromiumPath)) {
+    log.info('Chromium binary not found — skipping browser auth setup (API-only run)');
+    return;
+  }
+
   const password = process.env.TEST_PASSWORD;
   const baseURL = process.env.BASE_URL;
 
