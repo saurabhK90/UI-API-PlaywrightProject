@@ -4,12 +4,19 @@
   "description": "Enterprise-grade Playwright + TypeScript automation suite covering UI and API testing",
   "scripts": {
     "test": "playwright test",
-    "test:smoke": "playwright test --project=ui-chrome --grep @smoke",
-    "test:regression": "playwright test --project=ui-chrome",
+    "test:smoke": "playwright test --project=ui-chrome --project=api --grep @smoke",
+    "test:regression": "playwright test --project=ui-chrome --project=api --grep @regression",
+    "test:e2e": "playwright test --project=ui-chrome --project=api --grep @e2e",
     "test:api": "playwright test --project=api",
+    "test:api:smoke": "playwright test --project=api --grep @smoke",
+    "test:api:regression": "playwright test --project=api --grep @regression",
+    "test:api:e2e": "playwright test --project=api --grep @e2e",
+    "test:ui": "playwright test --project=ui-chrome",
+    "test:ui:smoke": "playwright test --project=ui-chrome --grep @smoke",
+    "test:ui:regression": "playwright test --project=ui-chrome --grep @regression",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
-    "test:ui": "playwright test --ui",
+    "test:inspector": "playwright test --ui",
     "lint": "eslint 'src/**/*.ts' 'tests/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' 'tests/**/*.ts' --fix",
     "format": "prettier --write 'src/**/*.ts' 'tests/**/*.ts'",
@@ -23,7 +30,7 @@
     "analyze-failures": "tsx scripts/analyze-failures.ts",
     "allure-env-setup": "tsx scripts/allure-env-setup.ts",
     "pretest": "npm run allure-env-setup",
-    "postinstall": "tsx scripts/patch-allure-language.ts"
+    "postinstall": "tsx scripts/patch-allure-language.ts && tsx scripts/patch-allure-async.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.24.0",
@@ -36,14 +43,14 @@
   "devDependencies": {
     "@playwright/test": "^1.44.0",
     "@types/node": "^20.0.0",
-    "allure-playwright": "^2.10.0",
-    "eslint": "^8.57.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
+    "allure-playwright": "^2.15.1",
+    "eslint": "^8.57.0",
+    "node-html-parser": "^6.1.0",
     "prettier": "^3.2.0",
     "tsx": "^4.10.0",
-    "typescript": "^5.4.0",
-    "node-html-parser": "^6.1.0"
+    "typescript": "^5.4.0"
   },
   "engines": {
     "node": ">=20.0.0"

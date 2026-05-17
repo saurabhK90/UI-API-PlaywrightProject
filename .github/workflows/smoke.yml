@@ -5,8 +5,52 @@ on:
     branches: [main, develop]
 
 jobs:
-  smoke:
-    name: Smoke Tests (Chrome)
+  smoke-api:
+    name: API Smoke Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Run API smoke tests
+        run: npm run test:api:smoke
+        env:
+          BASE_URL: ${{ secrets.BASE_URL_STAGING }}
+          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          BOOKER_USERNAME: ${{ secrets.BOOKER_USERNAME }}
+          BOOKER_PASSWORD: ${{ secrets.BOOKER_PASSWORD }}
+          LOG_LEVEL: warn
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-smoke-api
+          path: allure-results/
+          retention-days: 7
+
+  smoke-ui:
+    name: UI Smoke Tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -19,25 +63,44 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
 
+      - name: Cache Playwright browsers
+        id: cache-playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install Playwright browsers
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
 
       - name: Run UI smoke tests
-        run: npx playwright test --project=ui-chrome --grep @smoke
+        run: npm run test:ui:smoke
         env:
           BASE_URL: ${{ secrets.BASE_URL_STAGING }}
           TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          BOOKER_USERNAME: ${{ secrets.BOOKER_USERNAME }}
+          BOOKER_PASSWORD: ${{ secrets.BOOKER_PASSWORD }}
           LOG_LEVEL: warn
 
       - name: Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-smoke
+          name: allure-results-smoke-ui
           path: allure-results/
           retention-days: 7
 
@@ -52,7 +115,7 @@ jobs:
   allure-report:
     name: Generate Allure Report
     runs-on: ubuntu-latest
-    needs: [smoke]
+    needs: [smoke-api, smoke-ui]
     if: always()
     permissions:
       contents: write
@@ -60,11 +123,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download Allure results
+      - name: Download all Allure results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-smoke
+          pattern: allure-results-smoke-*
           path: allure-results/
+          merge-multiple: true
 
       - uses: actions/setup-node@v4
         with:

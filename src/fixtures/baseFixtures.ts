@@ -50,6 +50,16 @@ export const test = base.extend<UIFixtures>({
     const rel = path.relative(process.cwd(), testInfo.file).replace(/\\/g, '/');
     Logger.startSpec(rel);
     await use();
+
+    if (testInfo.status === 'failed' || testInfo.status === 'timedOut') {
+      const log = Logger.getInstance();
+      const firstError = testInfo.errors[0];
+      const errMsg = firstError?.message?.split('\n')[0] ?? 'Unknown error';
+      log.error(`[${testInfo.status.toUpperCase()}] ${testInfo.title}: ${errMsg}`, {
+        duration: `${testInfo.duration}ms`,
+        stack: firstError?.stack,
+      });
+    }
   }, { auto: true }],
 
   loginPage: async ({ page }, use) => {

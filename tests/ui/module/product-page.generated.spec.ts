@@ -20,7 +20,7 @@ test.describe('Product Page - Add to Cart', () => {
     await productPage.navigateToInventory();
   });
 
-  test('standard user adds a single product to cart and cart count increments to 1',
+  test('Verify user sees cart count increment to 1 when a single product is added to cart',
     { tag: ['@smoke', '@regression'] },
     async ({ productPage }) => {
       await allure.feature('Product Page');
@@ -37,7 +37,7 @@ test.describe('Product Page - Add to Cart', () => {
       await UIAssertions.assertElementVisible(productPage.getRemoveButtonByIndex(0), 'Remove button for first product');
     });
 
-  test('standard user adds multiple products to cart and cart count matches items added',
+  test('Verify user sees cart count match the number of items when multiple products are added to cart',
     { tag: '@regression' },
     async ({ productPage }) => {
       await allure.feature('Product Page');
@@ -64,7 +64,7 @@ test.describe('Product Page - Remove from Cart', () => {
     await productPage.navigateToInventory();
   });
 
-  test('standard user removes a single product from cart and cart count decrements by 1',
+  test('Verify user sees cart count decrement by 1 when a single product is removed from cart',
     { tag: '@regression' },
     async ({ productPage }) => {
       await allure.feature('Product Page');
@@ -83,7 +83,7 @@ test.describe('Product Page - Remove from Cart', () => {
       await UIAssertions.assertElementVisible(productPage.getAddToCartButtonByIndex(0), 'Add to cart button reverted for first product');
     });
 
-  test('standard user removes multiple products from cart and count reduces after each removal',
+  test('Verify user sees cart count reduce after each removal when multiple products are removed one by one',
     { tag: '@regression' },
     async ({ productPage }) => {
       await allure.feature('Product Page');
@@ -103,7 +103,7 @@ test.describe('Product Page - Remove from Cart', () => {
       await UIAssertions.assertElementText(productPage.getCartBadgeLocator(), '1');
     });
 
-  test('standard user removes all products from cart and cart badge disappears',
+  test('Verify user sees cart badge disappear when all products are removed from cart',
     { tag: '@regression' },
     async ({ productPage }) => {
       await allure.feature('Product Page');
@@ -132,7 +132,7 @@ test.describe('Product Page - Product Navigation', () => {
     await productPage.navigateToInventory();
   });
 
-  test('standard user clicks a product name and is redirected to the product detail page',
+  test('Verify user is redirected to the product detail page when a product name is clicked',
     { tag: ['@smoke', '@regression'] },
     async ({ productPage, productDetailPage, page }) => {
       await allure.feature('Product Page');
@@ -162,7 +162,7 @@ test.describe('Product Page - Cart Navigation', () => {
     await productPage.navigateToInventory();
   });
 
-  test('standard user clicks cart icon with 0 items and navigates to empty cart page',
+  test('Verify user sees an empty cart page when the cart icon is clicked with no items added',
     { tag: ['@smoke', '@regression'] },
     async ({ productPage, cartPage, page }) => {
       await allure.feature('Product Page');
@@ -182,7 +182,7 @@ test.describe('Product Page - Cart Navigation', () => {
       await UIAssertions.assertElementCount(cartPage.getCartItemsLocator(), 0);
     });
 
-  test('standard user clicks cart icon with one item and navigates to cart page showing that item',
+  test('Verify user sees the added item on the cart page when the cart icon is clicked with one item in cart',
     { tag: ['@smoke', '@regression'] },
     async ({ productPage, cartPage, page }) => {
       await allure.feature('Product Page');
@@ -202,7 +202,7 @@ test.describe('Product Page - Cart Navigation', () => {
       await UIAssertions.assertElementCount(cartPage.getCartItemsLocator(), 1);
     });
 
-  test('standard user clicks cart icon with multiple items and navigates to cart page showing all items',
+  test('Verify user sees all added items on the cart page when the cart icon is clicked with multiple items in cart',
     { tag: '@regression' },
     async ({ productPage, cartPage, page }) => {
       await allure.feature('Product Page');
@@ -230,7 +230,7 @@ test.describe('Product Page - Cart Persistence', () => {
     await productPage.navigateToInventory();
   });
 
-  test('standard user cart count remains consistent after navigating away and returning to products page',
+  test('Verify user sees cart count remain consistent when navigating away from cart and returning to the products page',
     { tag: '@regression' },
     async ({ productPage, cartPage, page }) => {
       await allure.feature('Product Page');
@@ -262,7 +262,7 @@ test.describe('Product Page - Problem User Defects', () => {
     await problemUserProductPage.navigateToInventory();
   });
 
-  test('problem user remove button does not reduce the cart quantity',
+  test('Verify user sees cart count unchanged when the remove button is clicked as problem user',
     { tag: '@regression' },
     async ({ problemUserProductPage }) => {
       await allure.feature('Product Page');
@@ -284,7 +284,7 @@ test.describe('Product Page - Problem User Defects', () => {
       test.expect(countAfterRemove, 'cart count should remain 2 — Remove is broken for problem_user').toBe(2);
     });
 
-  test('problem user sees all product images as the same image across all listings',
+  test('Verify user sees all product listing images as the same image when browsing as problem user',
     { tag: '@regression' },
     async ({ problemUserProductPage }) => {
       await allure.feature('Product Page');
@@ -303,7 +303,7 @@ test.describe('Product Page - Problem User Defects', () => {
       ).toBe(1);
     });
 
-  test('problem user clicking a product link sees an incorrect image on the detail page',
+  test('Verify user sees a different incorrect image on the detail page when a product link is clicked as problem user',
     { tag: '@regression' },
     async ({ problemUserProductPage, problemUserProductDetailPage }) => {
       await allure.feature('Product Page');

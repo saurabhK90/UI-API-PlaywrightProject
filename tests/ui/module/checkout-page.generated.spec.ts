@@ -19,7 +19,7 @@ test.describe('Checkout', () => {
       await productPage.navigateToInventory();
     });
 
-    test('user proceeds from checkout step 1 to step 2 with valid form data',
+    test('Verify user proceeds to checkout step 2 when valid first name, last name and zip code are entered',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
       await allure.feature('Checkout');
@@ -43,7 +43,7 @@ test.describe('Checkout', () => {
       await UIAssertions.assertURLContains(page, CheckoutPageExpectations.STEP_TWO_URL);
     });
 
-    test('checkout step 2 displays correct items and accurate order total including tax',
+    test('Verify user sees correct item and accurate order total including tax on checkout step 2 when a single item is added',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage }) => {
       await allure.feature('Checkout');
@@ -75,7 +75,7 @@ test.describe('Checkout', () => {
       test.expect(total,    'Grand total should equal item total + tax').toBeCloseTo(subtotal + tax, 2);
     });
 
-    test('checkout step 2 order total is correct when multiple items are added',
+    test('Verify user sees correct subtotal, tax and grand total on checkout step 2 when multiple items are added to cart',
       { tag: '@regression' },
       async ({ productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage }) => {
       await allure.feature('Checkout');
@@ -110,7 +110,7 @@ test.describe('Checkout', () => {
       test.expect(total,    'Grand total should equal item total + tax').toBeCloseTo(subtotal + tax, 2);
     });
 
-    test('user sees thank you confirmation message after completing purchase',
+    test('Verify user sees thank you confirmation message when the full checkout flow is completed with a valid order',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage, page }) => {
       await allure.feature('Checkout');
@@ -139,7 +139,7 @@ test.describe('Checkout', () => {
       );
     });
 
-    test('Continue button shows first name required error when all fields are left empty',
+    test('Verify user sees first name required error when Continue is clicked with all checkout form fields empty',
       { tag: '@regression' },
       async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
       await allure.feature('Checkout');
@@ -166,7 +166,7 @@ test.describe('Checkout', () => {
       await UIAssertions.assertURLContains(page, CheckoutPageExpectations.STEP_ONE_URL);
     });
 
-    test('Continue button shows last name required error when last name is missing',
+    test('Verify user sees last name required error when Continue is clicked with last name field left empty',
       { tag: '@regression' },
       async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
       await allure.feature('Checkout');
@@ -195,7 +195,7 @@ test.describe('Checkout', () => {
       await UIAssertions.assertURLContains(page, CheckoutPageExpectations.STEP_ONE_URL);
     });
 
-    test('Continue button shows postal code required error when zip code is missing',
+    test('Verify user sees postal code required error when Continue is clicked with zip code field left empty',
       { tag: '@regression' },
       async ({ productPage, cartPage, checkoutStepOnePage, page }) => {
       await allure.feature('Checkout');
@@ -232,7 +232,7 @@ test.describe('Checkout', () => {
       await problemUserProductPage.navigateToInventory();
     });
 
-    test('problem user cannot complete checkout because last name field rejects input',
+    test('Verify problem user sees last name required error on checkout when the last name field rejects typed input',
       { tag: '@regression' },
       async ({ problemUserProductPage, problemUserCartPage, problemUserCheckoutStepOnePage, problemUserPage }) => {
       await allure.feature('Checkout');

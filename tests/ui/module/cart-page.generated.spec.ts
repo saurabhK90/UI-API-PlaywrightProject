@@ -18,7 +18,7 @@ test.describe('Cart Page', () => {
       await productPage.navigateToInventory();
     });
 
-    test('user sees correct details for a single item added from the Products page',
+    test('Verify user sees correct name, description, price and quantity when a single item is added from the Products page',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage }) => {
       await allure.feature('Cart Page');
@@ -47,7 +47,7 @@ test.describe('Cart Page', () => {
       await UIAssertions.assertElementText(cartPage.getItemQuantityLocatorByIndex(0), '1');
     });
 
-    test('user sees correct details for multiple items added from the Products page',
+    test('Verify user sees correct details for all items when multiple products are added from the Products page',
       { tag: '@regression' },
       async ({ productPage, cartPage }) => {
       await allure.feature('Cart Page');
@@ -78,7 +78,7 @@ test.describe('Cart Page', () => {
       test.expect(badgeCount, 'Cart badge should show 3').toBe(3);
     });
 
-    test('user removes a single item from the cart',
+    test('Verify user sees cart empty and badge hidden when a single item is removed from the cart',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage }) => {
       await allure.feature('Cart Page');
@@ -102,7 +102,7 @@ test.describe('Cart Page', () => {
       await UIAssertions.assertElementHidden(cartPage.getCartBadgeLocator(), 'cart badge');
     });
 
-    test('user removes all items from the cart one by one and cart becomes empty',
+    test('Verify user sees cart become empty and badge hidden when all items are removed one by one',
       { tag: '@regression' },
       async ({ productPage, cartPage }) => {
       await allure.feature('Cart Page');
@@ -125,7 +125,7 @@ test.describe('Cart Page', () => {
       await UIAssertions.assertElementHidden(cartPage.getCartBadgeLocator(), 'cart badge');
     });
 
-    test('user is navigated to the Products page when Continue Shopping is clicked',
+    test('Verify user is navigated to the Products page when Continue Shopping is clicked from an empty cart',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, page }) => {
       await allure.feature('Cart Page');
@@ -148,7 +148,7 @@ test.describe('Cart Page', () => {
       await UIAssertions.assertElementVisible(productPage.getPageTitleLocator(), 'Products heading');
     });
 
-    test('user is navigated to the Checkout page when Checkout is clicked with items in cart',
+    test('Verify user is navigated to the Checkout page when Checkout is clicked with items in cart',
       { tag: ['@smoke', '@regression'] },
       async ({ productPage, cartPage, page }) => {
       await allure.feature('Cart Page');
@@ -171,7 +171,7 @@ test.describe('Cart Page', () => {
       await UIAssertions.assertURLContains(page, '/checkout-step-one.html');
     });
 
-    test('user can click Checkout with an empty cart',
+    test('Verify user is navigated to the Checkout page when Checkout is clicked with an empty cart',
       { tag: '@regression' },
       async ({ productPage, cartPage, page }) => {
       await allure.feature('Cart Page');
@@ -192,7 +192,7 @@ test.describe('Cart Page', () => {
       await UIAssertions.assertURLContains(page, '/checkout-step-one.html');
     });
 
-    test('cart items persist after navigating to the Products page and returning to cart',
+    test('Verify user sees previously added items still in cart when returning after navigating to the Products page',
       { tag: '@regression' },
       async ({ productPage, cartPage }) => {
       await allure.feature('Cart Page');
@@ -228,7 +228,7 @@ test.describe('Cart Page', () => {
       await problemUserProductPage.navigateToInventory();
     });
 
-    test('problem user sees correct item details on the cart page matching what was added from the Products page',
+    test('Verify problem user sees correct item details on the cart page when an item is added from the Products page',
       { tag: '@regression' },
       async ({ problemUserProductPage, problemUserCartPage }) => {
       await allure.feature('Cart Page');
@@ -253,7 +253,7 @@ test.describe('Cart Page', () => {
       await UIAssertions.assertElementContainsText(problemUserCartPage.getItemPriceLocatorByIndex(0), productPrice);
     });
 
-    test('problem user can remove an item from the cart',
+    test('Verify problem user sees cart empty and badge hidden when an item is removed from the cart',
       { tag: '@regression' },
       async ({ problemUserProductPage, problemUserCartPage }) => {
       await allure.feature('Cart Page');
@@ -276,7 +276,7 @@ test.describe('Cart Page', () => {
       await UIAssertions.assertElementHidden(problemUserCartPage.getCartBadgeLocator(), 'cart badge');
     });
 
-    test('problem user is navigated to the Products page when Continue Shopping is clicked',
+    test('Verify problem user is navigated to the Products page when Continue Shopping is clicked from the cart',
       { tag: '@regression' },
       async ({ problemUserProductPage, problemUserCartPage, problemUserPage }) => {
       await allure.feature('Cart Page');
@@ -298,7 +298,7 @@ test.describe('Cart Page', () => {
       await UIAssertions.assertElementVisible(problemUserProductPage.getPageTitleLocator(), 'Products heading');
     });
 
-    test('problem user is navigated to the Checkout page when Checkout is clicked',
+    test('Verify problem user is navigated to the Checkout page when Checkout is clicked with an item in cart',
       { tag: '@regression' },
       async ({ problemUserProductPage, problemUserCartPage, problemUserPage }) => {
       await allure.feature('Cart Page');

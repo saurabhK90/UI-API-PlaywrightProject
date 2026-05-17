@@ -1,5 +1,5 @@
 import { createLogger, transports, format, Logger as WinstonLogger } from 'winston';
-import { mkdirSync } from 'fs';
+import { mkdirSync, writeFileSync } from 'fs';
 
 type LogLevel = 'error' | 'warn' | 'info' | 'debug' | 'verbose';
 
@@ -10,8 +10,8 @@ type LogLevel = 'error' | 'warn' | 'info' | 'debug' | 'verbose';
  *   LOG_LEVEL=debug npm run test:regression   → full detail locally
  *   LOG_LEVEL=warn  npx playwright test        → only warnings in CI
  *
- * All logs  → logs/test-run.log   (overwritten each run)
- * Error logs → logs/test-errors.log (error level only, overwritten each run)
+ * All logs  → logs/test-run.log   (appended; cleared once per run by clearLogs() in globalSetup)
+ * Error logs → logs/test-errors.log (error level only; same clear policy)
  *
  * When running multiple spec files, call Logger.startSpec(specName) in beforeAll
  * to write a separator so the combined log stays scannable.
@@ -50,14 +50,26 @@ export class Logger {
         format: sharedFormat,
         transports: [
           new transports.Console(),
-          new transports.File({ filename: 'logs/test-run.log', options: { flags: 'w' } }),
+          new transports.File({ filename: 'logs/test-run.log', options: { flags: 'a' } }),
           // Captures only error-level entries; includes stack traces when available.
-          new transports.File({ filename: 'logs/test-errors.log', level: 'error', format: errorFormat, options: { flags: 'w' } }),
+          new transports.File({ filename: 'logs/test-errors.log', level: 'error', format: errorFormat, options: { flags: 'a' } }),
         ],
       });
     }
 
     return Logger.instance;
+  }
+
+  /**
+   * Truncate both log files. Called once at the start of globalSetup so each
+   * test run starts with empty logs, while still using append-mode transports
+   * (which avoids the multi-process truncation bug where the worker process
+   * would clobber logs written by the global setup process).
+   */
+  static clearLogs(): void {
+    mkdirSync('logs', { recursive: true });
+    writeFileSync('logs/test-run.log', '');
+    writeFileSync('logs/test-errors.log', '');
   }
 
   /**

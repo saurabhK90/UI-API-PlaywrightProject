@@ -13,41 +13,115 @@ on:
         options: [staging, dev]
 
 jobs:
-  ui-tests:
-    name: UI Regression (Chrome)
+  regression-api:
+    name: API Regression Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Run API regression tests
+        run: npm run test:api:regression
+        env:
+          BASE_URL: ${{ secrets.BASE_URL_STAGING }}
+          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          BOOKER_USERNAME: ${{ secrets.BOOKER_USERNAME }}
+          BOOKER_PASSWORD: ${{ secrets.BOOKER_PASSWORD }}
+          LOG_LEVEL: warn
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results-regression-api
+          path: allure-results/
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-regression-api
+          path: playwright-report/
+
+  regression-ui:
+    name: UI Regression Tests
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - name: Run UI regression
-        run: npx playwright test --project=ui-chrome --reporter=allure-playwright
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Cache Playwright browsers
+        id: cache-playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright browsers
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Run UI regression tests
+        run: npm run test:ui:regression
         env:
           BASE_URL: ${{ secrets.BASE_URL_STAGING }}
           TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          BOOKER_USERNAME: ${{ secrets.BOOKER_USERNAME }}
+          BOOKER_PASSWORD: ${{ secrets.BOOKER_PASSWORD }}
           LOG_LEVEL: warn
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: allure-results-ui
+          name: allure-results-regression-ui
           path: allure-results/
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report-ui
+          name: playwright-report-regression-ui
           path: playwright-report/
 
   allure-report:
     name: Generate & Publish Allure Report
     runs-on: ubuntu-latest
-    needs: [ui-tests]
+    needs: [regression-api, regression-ui]
     if: always()
     permissions:
       contents: write
@@ -55,11 +129,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download UI results
+      - name: Download all Allure results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-ui
+          pattern: allure-results-regression-*
           path: allure-results/
+          merge-multiple: true
 
       - uses: actions/setup-node@v4
         with:
@@ -71,9 +146,10 @@ jobs:
       - name: Generate Allure report
         run: allure generate allure-results --output allure-report --clean
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy Regression Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-report
+          destination_dir: regression
