@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/booking",
+    "body": {
+      "firstname": "Sabryna",
+      "lastname": "Boyer-Turcotte",
+      "totalprice": 243,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-07-15",
+        "checkout": "2026-07-16"
+      },
+      "additionalneeds": "Victus volubilis subiungo."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "bookingid": 4757,
+      "booking": {
+        "firstname": "Sabryna",
+        "lastname": "Boyer-Turcotte",
+        "totalprice": 243,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-07-15",
+          "checkout": "2026-07-16"
+        },
+        "additionalneeds": "Victus volubilis subiungo."
+      }
+    }
+  }
+}

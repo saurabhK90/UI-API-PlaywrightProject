@@ -1,0 +1,1 @@
+[15:29:47.403] WARN    POST /booking returned 500 {"responseBody":"Internal Server Error"}

@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/booking",
+    "body": {}
+  },
+  "response": {
+    "status": 500,
+    "body": "Internal Server Error"
+  }
+}

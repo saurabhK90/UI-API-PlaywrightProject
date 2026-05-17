@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "PUT",
+    "endpoint": "/booking/4756",
+    "body": {
+      "firstname": "Thelma",
+      "lastname": "Thiel",
+      "totalprice": 579,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-06-22",
+        "checkout": "2026-06-27"
+      },
+      "additionalneeds": "Desolo patrocinor utor."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "firstname": "Thelma",
+      "lastname": "Thiel",
+      "totalprice": 579,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-06-22",
+        "checkout": "2026-06-27"
+      },
+      "additionalneeds": "Desolo patrocinor utor."
+    }
+  }
+}

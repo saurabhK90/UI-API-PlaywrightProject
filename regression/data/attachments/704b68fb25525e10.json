@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "endpoint": "/booking/4749",
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "firstname": "Florida",
+      "lastname": "Dickinson",
+      "totalprice": 703,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-06-26",
+        "checkout": "2026-06-29"
+      },
+      "additionalneeds": "Suscipit agnosco ager."
+    }
+  }
+}

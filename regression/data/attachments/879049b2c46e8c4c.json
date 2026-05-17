@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "endpoint": "/booking",
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

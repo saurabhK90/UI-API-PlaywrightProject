@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "PUT",
+    "endpoint": "/booking/4754",
+    "body": {
+      "firstname": "Adrienne",
+      "lastname": "Schulist",
+      "totalprice": 218,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-06-05",
+        "checkout": "2026-06-07"
+      },
+      "additionalneeds": "Aspernatur tersus tripudio."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "firstname": "Adrienne",
+      "lastname": "Schulist",
+      "totalprice": 218,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-06-05",
+        "checkout": "2026-06-07"
+      },
+      "additionalneeds": "Aspernatur tersus tripudio."
+    }
+  }
+}

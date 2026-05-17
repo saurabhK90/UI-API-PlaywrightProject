@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "PUT",
+    "endpoint": "/booking/4757",
+    "body": {
+      "firstname": "Sabryna",
+      "lastname": "Boyer-Turcotte",
+      "totalprice": 243,
+      "depositpaid": false,
+      "bookingdates": {
+        "checkin": "2026-07-15",
+        "checkout": "2026-07-16"
+      },
+      "additionalneeds": "Victus volubilis subiungo."
+    }
+  },
+  "response": {
+    "status": 403,
+    "body": "Forbidden"
+  }
+}

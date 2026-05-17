@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/auth",
+    "body": {
+      "username": "",
+      "password": ""
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reason": "Bad credentials"
+    }
+  }
+}

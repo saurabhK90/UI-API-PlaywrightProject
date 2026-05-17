@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/booking",
+    "body": {
+      "firstname": "Filter5pau9u52",
+      "lastname": "Hegmann",
+      "totalprice": 857,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-06-13",
+        "checkout": "2026-06-18"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "bookingid": 4751,
+      "booking": {
+        "firstname": "Filter5pau9u52",
+        "lastname": "Hegmann",
+        "totalprice": 857,
+        "depositpaid": true,
+        "bookingdates": {
+          "checkin": "2026-06-13",
+          "checkout": "2026-06-18"
+        }
+      }
+    }
+  }
+}

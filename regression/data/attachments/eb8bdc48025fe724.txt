@@ -1,0 +1,1 @@
+[15:29:47.628] WARN    GET /booking/999999999 returned 404 {"responseBody":"Not Found"}

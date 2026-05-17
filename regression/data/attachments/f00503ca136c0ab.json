@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "DELETE",
+    "endpoint": "/booking/4747",
+    "body": null
+  },
+  "response": {
+    "status": 403,
+    "body": "Forbidden"
+  }
+}
